@@ -1,9 +1,11 @@
 import { services } from "@/content/services";
+import { FloatingBook } from "@/components/site/floating-book";
 import { JsonLd } from "@/components/site/json-ld";
 import { SiteFooter } from "@/components/site/site-footer";
 import { RevealObserver } from "@/components/site/reveal-observer";
 import { SiteHeader } from "@/components/site/site-header";
 import { getSiteSettings } from "@/lib/data";
+import { insightLinks, serviceLinks } from "@/lib/nav";
 import { organizationId, websiteId } from "@/lib/seo";
 import { absoluteUrl, site } from "@/lib/site";
 
@@ -88,9 +90,10 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       >
         Skip to main content
       </a>
-      <SiteHeader />
+      <SiteHeader serviceLinks={serviceLinks} insightLinks={insightLinks} />
       <main id="main">{children}</main>
       <SiteFooter />
+      <FloatingBook />
       <RevealObserver />
       <JsonLd data={organization} />
     </div>

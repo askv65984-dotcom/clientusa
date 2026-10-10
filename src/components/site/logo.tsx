@@ -1,31 +1,24 @@
+import Image from "next/image";
 import Link from "next/link";
+import logo from "@/assets/brand/anoka-advisors-logo.png";
+import mark from "@/assets/brand/anoka-mark.png";
 
-/**
- * The mark: two strokes leaning in to meet near the top, held by one crossbar.
- * The left stroke takes the text color, the right stroke is always gold.
- */
-export function LogoMark({ className = "size-8" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" className={className}>
-      <path d="M7 35 L18.3 5.5" stroke="currentColor" strokeWidth="4.25" strokeLinecap="square" fill="none" />
-      <path d="M21.7 5.5 L33 35" stroke="var(--color-gold)" strokeWidth="4.25" strokeLinecap="square" fill="none" />
-      <path d="M12.6 24.5 H27.4" stroke="currentColor" strokeWidth="3.25" fill="none" />
-    </svg>
-  );
+/** The full logo: gold A mark, "Anoka" in white and "Advisors" in bronze. For dark backgrounds. */
+export function BrandLogo({ className = "h-11 w-auto", priority = false }: { className?: string; priority?: boolean }) {
+  return <Image src={logo} alt="Anoka Advisors" priority={priority} sizes="200px" className={className} />;
 }
 
-export function Logo({ tone = "dark" }: { tone?: "dark" | "light" }) {
-  const color = tone === "dark" ? "text-evergreen" : "text-paper";
+/** The gold A mark on its own. Decorative unless alt is given. */
+export function BrandMark({ className = "size-10", alt = "" }: { className?: string; alt?: string }) {
+  return <Image src={mark} alt={alt} sizes="64px" className={className} />;
+}
+
+/** For light backgrounds (the admin sign-in page): the mark with the name in dark type. */
+export function Logo() {
   return (
-    <Link
-      href="/"
-      className={`inline-flex items-center gap-2.5 no-underline ${color}`}
-      aria-label="Anoka Advisors, home"
-    >
-      <LogoMark className="size-8 shrink-0" />
-      <span className="font-serif text-[1.375rem] leading-none font-medium tracking-[-0.01em]">
-        Anoka Advisors
-      </span>
+    <Link href="/" className="inline-flex items-center gap-2.5 text-evergreen no-underline" aria-label="Anoka Advisors, home">
+      <BrandMark className="size-10 shrink-0" />
+      <span className="font-serif text-[1.375rem] leading-none font-medium tracking-[-0.01em]">Anoka Advisors</span>
     </Link>
   );
 }

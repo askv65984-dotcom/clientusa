@@ -594,6 +594,67 @@
   animation-delay: var(--d, 0ms);
 }
 
+/* Hero: the panel settles into place, the photo eases back from a zoom and the headline rises word by
+   word. Transforms only, so the photo paints at once. */
+@keyframes hero-frame-in {
+  from {
+    transform: translateY(28px) scale(0.965);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes hero-media-in {
+  from {
+    transform: scale(1.18);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes word-up {
+  from {
+    transform: translateY(108%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.hero-frame {
+  animation: hero-frame-in 1200ms cubic-bezier(0.2, 0.75, 0.15, 1) both;
+}
+
+.hero-media {
+  animation: hero-media-in 2400ms cubic-bezier(0.2, 0.75, 0.15, 1) both;
+}
+
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* Room for descenders and accents inside the mask. */
+  padding: 0.06em 0 0.14em;
+  margin: -0.06em 0 -0.14em;
+}
+
+.word {
+  display: inline-block;
+  animation: word-up 1000ms cubic-bezier(0.2, 0.75, 0.15, 1) both;
+  animation-delay: var(--wd, 0ms);
+}
+
 .glow {
   position: absolute;
   border-radius: 999px;
@@ -701,5 +762,13 @@
   .glow {
     animation: none !important;
     transform: none;
+  }
+
+  /* Shown in place straight away, without waiting out the entrance delays. */
+  .hero-frame,
+  .hero-media,
+  .word,
+  .rise {
+    animation: none !important;
   }
 }

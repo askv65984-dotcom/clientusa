@@ -8,13 +8,13 @@ import { FeeSchedule } from "@/components/site/fee-schedule";
 import { HeroSlider, type HeroSlide } from "@/components/site/hero-slider";
 import { InsightCard } from "@/components/site/insight-card";
 import { JsonLd } from "@/components/site/json-ld";
-import { Photo } from "@/components/site/photo";
+import { Photo, type PhotoKey } from "@/components/site/photo";
 import {
+  ArrowIcon,
   CheckList,
   CtaBand,
   FaqSection,
   ImageCard,
-  ImageCardGrid,
   Marquee,
   PhotoBand,
   SectionHeading,
@@ -23,7 +23,7 @@ import {
   type ImageCardItem,
 } from "@/components/site/sections";
 import { insights } from "@/content/insights";
-import { engagementSteps, generalFaqs, services } from "@/content/services";
+import { engagementSteps, generalFaqs } from "@/content/services";
 import { getActivePackages, getConsultationPackage } from "@/lib/data";
 import { faqJsonLd, pageMetadata, webPageJsonLd } from "@/lib/seo";
 import { photoSrc } from "@/lib/photos";
@@ -56,6 +56,71 @@ const slides: HeroSlide[] = [
     href: "/services/pharmacy-operations-consulting",
   },
 ];
+
+type Tile = { image: PhotoKey; title: string; tagline: string; href: string };
+
+// "What we do": the three practice areas large, then the ways to work with us.
+const practiceTiles: Tile[] = [
+  { image: "svc-row-healthcare", title: "Healthcare operations", tagline: "Access, workflow, staffing and reporting.", href: "/services/healthcare-operations-consulting" },
+  { image: "th-overview", title: "Telehealth", tagline: "Virtual care that runs like an in-person visit.", href: "/services/telehealth-consulting" },
+  { image: "svc-row-pharmacy", title: "Pharmacy operations", tagline: "Steadier days behind the counter.", href: "/services/pharmacy-operations-consulting" },
+];
+const offerTiles: Tile[] = [
+  { image: "th-approach", title: "Initial consultation", tagline: "Start with a conversation, by video.", href: "/book#initial" },
+  { image: "hc-deliverables", title: "Paid diagnostic call", tagline: "An expert read, with written priorities.", href: "/book#options" },
+  { image: "hc-engage", title: "Monthly advisory retainer", tagline: "A senior sounding board, every month.", href: "/pricing#advisory-retainer" },
+];
+const wideTiles: Tile[] = [
+  { image: "th-deliverables", title: "Focused projects", tagline: "Launch plans, workflow redesigns and SOP libraries.", href: "/pricing#operations-project" },
+  { image: "pr-faq", title: "Insights and guides", tagline: "Practical reading for operations leaders.", href: "/insights" },
+];
+
+/** Tall, pill-shaped card for the phone slider, with a round arrow button in the corner. */
+function PillTile({ tile }: { tile: Tile }) {
+  return (
+    <Link href={tile.href} className="group relative isolate block aspect-[4/7] overflow-hidden rounded-[2.75rem] no-underline">
+      <Photo name={tile.image} alt="" sizes="80vw" className="-z-10 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
+      <div className="absolute inset-0 -z-10 bg-linear-to-t from-black/90 via-black/35 to-black/10" />
+      <span
+        aria-hidden="true"
+        className="absolute top-6 right-6 grid size-12 place-items-center rounded-full border-2 border-white/80 text-white transition-colors group-hover:border-gold group-hover:bg-gold group-hover:text-night"
+      >
+        <ArrowIcon className="size-5" />
+      </span>
+      <div className="absolute inset-x-0 bottom-0 px-7 pb-9">
+        <h3 className="font-sans text-[1.75rem] leading-[1.12] font-bold tracking-[-0.015em] text-fg">{tile.title}</h3>
+        <p className="mt-3 text-[1.0625rem] leading-snug text-fg/85">{tile.tagline}</p>
+      </div>
+    </Link>
+  );
+}
+
+function TileLink({ tile, size, index }: { tile: Tile; size: "large" | "small" | "wide"; index: number }) {
+  const ratio = { large: "aspect-[4/3]", small: "aspect-[16/9] lg:aspect-[2/1]", wide: "aspect-[16/9] lg:aspect-[8/3]" }[size];
+  return (
+    <Link
+      href={tile.href}
+      data-reveal
+      style={delay(index * 80)}
+      className={`group relative isolate block overflow-hidden rounded-[22px] border border-line no-underline transition-colors duration-300 hover:border-gold/60 ${ratio}`}
+    >
+      <Photo
+        name={tile.image}
+        alt=""
+        sizes={size === "small" ? "(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw" : "(min-width: 1024px) 45vw, 92vw"}
+        className="-z-10 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+      />
+      <div className="absolute inset-0 -z-10 bg-linear-to-t from-black/85 via-black/30 to-black/5" />
+      <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+        <h3 className={`flex items-center gap-2 font-sans font-semibold tracking-[-0.01em] text-fg ${size === "small" ? "text-[1.25rem]" : "text-[1.5rem] md:text-[1.75rem]"}`}>
+          {tile.title}
+          <ArrowIcon className="size-4 -translate-x-1 text-gold opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+        </h3>
+        <p className="mt-1 text-[0.975rem] text-fg/80">{tile.tagline}</p>
+      </div>
+    </Link>
+  );
+}
 
 const audiences: ImageCardItem[] = [
   { image: "aud-practices", title: "Medical practices", body: "Independent and multi-site practices tightening access, workflow and staffing." },
@@ -190,22 +255,49 @@ export default async function HomePage() {
         </div>
       </PhotoBand>
 
-      {/* 5. Practice areas */}
-      <section className="page-container py-20 md:py-28">
-        <SectionHeading
-          kicker="Practice areas"
-          title="Three practice areas, one view of the patient's path"
-          intro="Many clients come to us with a problem in one area and find it reaches into another. We work across all three."
-        />
-        <div className="mt-12">
-          <ImageCardGrid
-            items={services.map((service) => ({
-              image: service.images.card,
-              title: service.name,
-              body: service.summary,
-              href: `/services/${service.slug}`,
-            }))}
-          />
+      {/* 5. What we do */}
+      <section aria-labelledby="what-we-do" className="page-container py-20 md:py-28">
+        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+          <div className="max-w-2xl">
+            <h2 id="what-we-do" className="text-section text-fg">
+              What we do
+            </h2>
+            <p className="mt-4 text-lede text-fg-muted">
+              Three practice areas, one view of the patient&rsquo;s path, and simple ways to start working together.
+            </p>
+          </div>
+          <Link href="/services" className="group inline-flex items-center gap-2 font-semibold text-gold no-underline hover:text-gold-strong">
+            All services
+            <ArrowIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </div>
+
+        {/* Phones: one swipeable row of every tile */}
+        <div data-reveal className="mt-10 md:hidden">
+          <Carousel label="What we do" slideClassName="basis-[78%]">
+            {[...practiceTiles, ...offerTiles, ...wideTiles].map((tile) => (
+              <PillTile key={tile.href} tile={tile} />
+            ))}
+          </Carousel>
+        </div>
+
+        {/* Tablets and desktops: the photo grid */}
+        <div className="hidden md:block">
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {practiceTiles.map((tile, index) => (
+              <TileLink key={tile.href} tile={tile} size="large" index={index} />
+            ))}
+          </div>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {offerTiles.map((tile, index) => (
+              <TileLink key={tile.href} tile={tile} size="small" index={index} />
+            ))}
+          </div>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {wideTiles.map((tile, index) => (
+              <TileLink key={tile.href} tile={tile} size="wide" index={index} />
+            ))}
+          </div>
         </div>
       </section>
 

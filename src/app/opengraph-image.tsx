@@ -1,20 +1,23 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import { brandColors as c, MarkSvg } from "@/lib/brand-image";
 
-// Fonts never change between requests, so they are read once when the module loads.
+// Fonts and the logo never change between requests, so they are read once when the module loads.
 const serif = await readFile(join(process.cwd(), "src/assets/newsreader-500.woff"));
 const sans = await readFile(join(process.cwd(), "src/assets/public-sans-500.woff"));
+const logo = `data:image/png;base64,${(await readFile(join(process.cwd(), "src/assets/brand/anoka-advisors-logo.png"))).toString("base64")}`;
 
 export const alt = "Anoka Advisors: operations consulting for healthcare, telehealth and pharmacy";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// The site's dark palette.
+const c = { night: "#0a1310", panel: "#13211c", line: "#34503f", fg: "#ebf1ed", muted: "#a9b8b1", gold: "#d8b77e", mint: "#86bfae" };
+
 const bars = [
-  { from: 0, to: 2, color: c.evergreen, label: "Healthcare" },
-  { from: 1, to: 3, color: c.teal, label: "Telehealth" },
-  { from: 3, to: 5, color: c.brass, label: "Pharmacy" },
+  { from: 0, to: 2, color: c.mint, label: "Healthcare" },
+  { from: 1, to: 3, color: c.fg, label: "Telehealth" },
+  { from: 3, to: 5, color: c.gold, label: "Pharmacy" },
 ];
 
 export default async function OpengraphImage() {
@@ -29,26 +32,25 @@ export default async function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          background: c.paper,
-          padding: `64px ${left}px`,
+          background: c.night,
+          backgroundImage: `radial-gradient(circle at 85% 10%, ${c.panel} 0%, ${c.night} 55%)`,
+          padding: `56px ${left}px`,
           fontFamily: "Public Sans",
-          color: c.ink,
+          color: c.fg,
           position: "relative",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <MarkSvg size={52} stroke={c.evergreen} accent={c.brass} />
-          <span style={{ fontFamily: "Newsreader", fontSize: 38, color: c.evergreen }}>Anoka Advisors</span>
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element -- next/og renders plain img elements */}
+        <img src={logo} width={218} height={84} alt="" />
         <div
           style={{
             display: "flex",
-            marginTop: 56,
+            marginTop: 52,
             fontFamily: "Newsreader",
             fontSize: 70,
             lineHeight: 1.06,
             letterSpacing: -1,
-            maxWidth: 940,
+            maxWidth: 960,
           }}
         >
           Operations consulting for healthcare, telehealth and pharmacy.
@@ -56,7 +58,7 @@ export default async function OpengraphImage() {
 
         {/* A compressed version of the care pathway from the home page */}
         <div style={{ position: "absolute", left, right: left, bottom: 64, height: 90, display: "flex" }}>
-          <div style={{ position: "absolute", left: 6, top: 6, width: step * 5, height: 2, background: c.ink }} />
+          <div style={{ position: "absolute", left: 6, top: 6, width: step * 5, height: 2, background: c.line }} />
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
@@ -67,8 +69,8 @@ export default async function OpengraphImage() {
                 width: 14,
                 height: 14,
                 borderRadius: 14,
-                border: `3px solid ${c.ink}`,
-                background: c.paper,
+                border: `3px solid ${c.gold}`,
+                background: c.night,
               }}
             />
           ))}

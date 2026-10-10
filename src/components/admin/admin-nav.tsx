@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { signOut } from "@/app/admin/actions";
-import { LogoMark } from "@/components/site/logo";
+import { BrandMark } from "@/components/site/logo";
 
 const links = [
   { href: "/admin", label: "Overview" },
@@ -27,7 +27,7 @@ export function AdminNav() {
     <aside className="border-b border-sage bg-evergreen text-paper lg:sticky lg:top-0 lg:h-dvh lg:border-b-0">
       <div className="flex items-center justify-between px-5 py-4 lg:px-6 lg:py-7">
         <Link href="/admin" className="inline-flex items-center gap-2.5 text-paper no-underline">
-          <LogoMark className="size-7" />
+          <BrandMark className="size-8" />
           <span className="font-serif text-lg leading-none">Anoka admin</span>
         </Link>
         <button

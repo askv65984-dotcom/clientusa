@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { FaqList } from "@/components/site/faq-list";
 import { InsightCard } from "@/components/site/insight-card";
 import { JsonLd } from "@/components/site/json-ld";
-import { LogoMark } from "@/components/site/logo";
+import { BrandMark } from "@/components/site/logo";
 import { Photo } from "@/components/site/photo";
 import { CheckList, CtaBand, SectionHeading } from "@/components/site/sections";
 import { formatInsightDate, getInsight, insights, relatedInsights } from "@/content/insights";
@@ -127,7 +127,7 @@ export default async function InsightPage({ params }: PageProps<"/insights/[slug
           </section>
 
           <aside className="card mt-14 flex max-w-[46rem] gap-5 p-6">
-            <LogoMark className="size-12 shrink-0 text-fg" />
+            <BrandMark className="size-12 shrink-0" />
             <div>
               <p className="font-semibold text-fg">Written by Anoka Advisors</p>
               <p className="mt-1 text-[0.975rem] text-fg-muted">

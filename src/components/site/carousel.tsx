@@ -65,7 +65,8 @@ export function Carousel({
       </div>
 
       <div className="mt-8 flex items-center justify-between gap-6">
-        <div className="flex flex-wrap gap-2">
+        {/* Round dots, with the current slide stretched into an oval pill. */}
+        <div className="flex flex-wrap items-center gap-1">
           {snaps.map((_, index) => (
             <button
               key={index}
@@ -73,8 +74,14 @@ export function Carousel({
               aria-label={`Go to slide ${index + 1}`}
               aria-current={index === selected ? "true" : undefined}
               onClick={() => embla?.scrollTo(index)}
-              className={`h-1.5 rounded-full transition-all duration-500 ${index === selected ? "w-9 bg-gold" : "w-4 bg-fg/25 hover:bg-fg/50"}`}
-            />
+              className="group grid h-8 place-items-center px-1"
+            >
+              <span
+                className={`block h-2.5 rounded-full transition-all duration-500 ${
+                  index === selected ? "w-8 bg-gold" : "w-2.5 bg-fg/30 group-hover:bg-fg/60"
+                }`}
+              />
+            </button>
           ))}
         </div>
         <div className="flex gap-2">

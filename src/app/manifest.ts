@@ -7,11 +7,11 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Operations consulting for healthcare, telehealth and pharmacy.",
     start_url: "/",
     display: "browser",
-    background_color: "#f6f7f5",
-    theme_color: "#1e3b33",
+    background_color: "#0a1310",
+    theme_color: "#0a1310",
     icons: [
-      { src: "/icon.svg", sizes: "any", type: "image/svg+xml" },
-      { src: "/apple-icon", sizes: "180x180", type: "image/png" },
+      { src: "/icon.png", sizes: "192x192", type: "image/png" },
+      { src: "/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
   };
 }

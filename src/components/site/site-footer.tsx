@@ -5,7 +5,7 @@ import { services } from "@/content/services";
 import { getSiteSettings } from "@/lib/data";
 import { telHref } from "@/lib/format";
 import { legalNav, mainNav } from "@/lib/site";
-import { LogoMark } from "./logo";
+import { BrandLogo } from "./logo";
 import { NewsletterForm } from "./newsletter-form";
 import { Photo } from "./photo";
 
@@ -56,9 +56,8 @@ export async function SiteFooter() {
       {/* Directory */}
       <div className="page-container grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
         <div className="sm:col-span-2 lg:col-span-3">
-          <Link href="/" className="inline-flex items-center gap-3 text-fg no-underline">
-            <LogoMark className="size-10" />
-            <span className="font-serif text-[1.6rem] leading-none font-medium">Anoka Advisors</span>
+          <Link href="/" className="inline-flex no-underline">
+            <BrandLogo className="h-16 w-auto" />
           </Link>
           <p className="mt-5 max-w-sm text-fg-muted">
             Operations consulting for healthcare practices, telehealth programs and pharmacies across the United States.

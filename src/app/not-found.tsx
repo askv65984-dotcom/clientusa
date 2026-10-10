@@ -4,6 +4,7 @@ import { RevealObserver } from "@/components/site/reveal-observer";
 import { PageHero } from "@/components/site/sections";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { insightLinks, serviceLinks } from "@/lib/nav";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div id="top" className="site">
-      <SiteHeader />
+      <SiteHeader serviceLinks={serviceLinks} insightLinks={insightLinks} />
       <main id="main">
         <PageHero
           image="not-found"

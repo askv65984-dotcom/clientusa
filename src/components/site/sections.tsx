@@ -21,7 +21,65 @@ export function ArrowIcon({ className = "size-4" }: { className?: string }) {
   );
 }
 
-/** Full-bleed photo hero used at the top of every inner page. */
+/**
+ * A headline that rises into view word by word. Each word slides up out of its own mask, so the
+ * text is in the HTML for crawlers and wraps normally.
+ */
+export function RevealWords({ text, start = 0, step = 65 }: { text: string; start?: number; step?: number }) {
+  const words = text.split(" ");
+  return (
+    <>
+      {words.map((word, index) => (
+        <span key={index}>
+          <span className="word-mask">
+            <span className="word" style={{ "--wd": `${start + index * step}ms` } as CSSProperties}>
+              {word}
+            </span>
+          </span>
+          {index < words.length - 1 ? " " : null}
+        </span>
+      ))}
+    </>
+  );
+}
+
+/** How long a RevealWords headline takes to finish, so what follows can come in after it. */
+export function revealEnd(text: string, start = 0, step = 65) {
+  return start + text.split(" ").length * step;
+}
+
+/**
+ * The rounded, inset panel at the top of every page: a photo or video that settles into place,
+ * shaded toward the bottom left so the white text stays readable.
+ */
+export function HeroFrame({
+  media,
+  size = "page",
+  children,
+}: {
+  media: ReactNode;
+  size?: "page" | "compact";
+  children: ReactNode;
+}) {
+  const height = {
+    page: "min-h-[68vh] md:min-h-[74vh]",
+    compact: "min-h-[46vh] md:min-h-[50vh]",
+  }[size];
+  return (
+    <section className="px-3 pt-[5.25rem] sm:px-4 md:pt-[6.25rem]">
+      <div className={`hero-frame relative isolate mx-auto flex max-w-[1880px] items-end overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem] ${height}`}>
+        <div className="hero-media absolute inset-0 -z-10">{media}</div>
+        {/* Neutral shade, so gold and color photos keep their color while white text stays readable. */}
+        <div className="absolute inset-0 -z-10 bg-black/15" />
+        <div className="absolute inset-0 -z-10 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute inset-0 -z-10 bg-linear-to-r from-black/65 via-black/20 to-transparent" />
+        <div className="page-container w-full pt-28 pb-10 md:pb-14 lg:pb-16">{children}</div>
+      </div>
+    </section>
+  );
+}
+
+/** Photo hero used at the top of every inner page. */
 export function PageHero({
   image,
   title,
@@ -37,33 +95,27 @@ export function PageHero({
   children?: ReactNode;
   compact?: boolean;
 }) {
+  const after = revealEnd(title, 250);
   return (
-    <section
-      className={`relative isolate flex items-end overflow-hidden pt-36 ${compact ? "min-h-[52vh] pb-14 md:pb-16" : "min-h-[82vh] pb-16 md:pb-24"}`}
+    <HeroFrame
+      size={compact ? "compact" : "page"}
+      media={<Photo name={image} alt="" priority sizes="100vw" className="kenburns object-cover" />}
     >
-      <div className="absolute inset-0 -z-10">
-        <Photo name={image} alt="" priority sizes="100vw" className="kenburns object-cover" />
-        <div className="absolute inset-0 bg-linear-to-t from-night via-night/70 to-night/35" />
-        <div className="absolute inset-0 bg-linear-to-r from-night/90 via-night/45 to-transparent" />
-      </div>
-      <div aria-hidden="true" className="glow -left-24 top-1/3 -z-10 size-96 bg-gold/30" />
-      <div className="page-container">
-        {breadcrumbs ? <div className="rise">{breadcrumbs}</div> : null}
-        <h1 className="rise mt-6 max-w-[20ch] text-display text-fg" style={delay(120)}>
-          {title}
-        </h1>
-        {lede ? (
-          <p className="rise mt-6 max-w-[42rem] text-lede text-fg-muted" style={delay(260)}>
-            {lede}
-          </p>
-        ) : null}
-        {children ? (
-          <div className="rise mt-9 flex flex-wrap gap-3" style={delay(400)}>
-            {children}
-          </div>
-        ) : null}
-      </div>
-    </section>
+      {breadcrumbs ? <div className="rise">{breadcrumbs}</div> : null}
+      <h1 className="mt-6 max-w-[20ch] text-display text-fg">
+        <RevealWords text={title} start={250} />
+      </h1>
+      {lede ? (
+        <p className="rise mt-6 max-w-[42rem] text-lede text-fg/80" style={delay(after + 100)}>
+          {lede}
+        </p>
+      ) : null}
+      {children ? (
+        <div className="rise mt-9 flex flex-wrap gap-3" style={delay(after + 250)}>
+          {children}
+        </div>
+      ) : null}
+    </HeroFrame>
   );
 }
 
