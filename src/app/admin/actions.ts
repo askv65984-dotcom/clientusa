@@ -50,9 +50,19 @@ const LOCKOUT_MINUTES = 15;
 const MAX_FAILURES_PER_IP = 5;
 const MAX_FAILURES_TOTAL = 30;
 
+/**
+ * The visitor's IP for the per-device limit. Hosts such as Vercel set x-real-ip themselves. In
+ * x-forwarded-for only the right-most entry is added by the nearest proxy; earlier entries come from
+ * the client and can be made up. The site-wide limit applies whatever this returns.
+ */
 async function clientIp() {
-  const forwarded = (await headers()).get("x-forwarded-for") ?? "";
-  return (forwarded.split(",")[0] ?? "").trim().slice(0, 100) || "unknown";
+  const requestHeaders = await headers();
+  const realIp = requestHeaders.get("x-real-ip")?.trim();
+  const forwarded = (requestHeaders.get("x-forwarded-for") ?? "")
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  return (realIp || forwarded.at(-1) || "unknown").slice(0, 100);
 }
 
 export async function signInWithPin(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -61,14 +71,18 @@ export async function signInWithPin(_prev: FormState, formData: FormData): Promi
 
   const service = createServiceClient();
   const ip = await clientIp();
-  const since = new Date(Date.now() - LOCKOUT_MINUTES * 60_000).toISOString();
 
-  // Slow down guessing: limit wrong attempts per device and across the whole site.
-  const [perIp, total] = await Promise.all([
-    service.from("admin_login_attempts").select("id", { count: "exact", head: true }).eq("ip", ip).eq("succeeded", false).gte("created_at", since),
-    service.from("admin_login_attempts").select("id", { count: "exact", head: true }).eq("succeeded", false).gte("created_at", since),
-  ]);
-  if ((perIp.count ?? 0) >= MAX_FAILURES_PER_IP || (total.count ?? 0) >= MAX_FAILURES_TOTAL) {
+  // Slow down guessing: limit wrong attempts per device and across the whole site. The database checks
+  // both limits and records this attempt in one locked step, so parallel requests cannot slip through.
+  const { data: reserved, error: reserveError } = await service.rpc("reserve_admin_login_attempt", {
+    p_ip: ip,
+    p_window_minutes: LOCKOUT_MINUTES,
+    p_max_per_ip: MAX_FAILURES_PER_IP,
+    p_max_total: MAX_FAILURES_TOTAL,
+  });
+  if (reserveError) throw new Error(`Could not check sign-in attempts: ${reserveError.message}`);
+  const attempt = (reserved as { attempt_id: number; ip_failures: number }[] | null)?.[0];
+  if (!attempt) {
     return { status: "error", message: `Too many incorrect attempts. Wait ${LOCKOUT_MINUTES} minutes and try again.` };
   }
 
@@ -76,11 +90,12 @@ export async function signInWithPin(_prev: FormState, formData: FormData): Promi
   if (secretError) throw new Error(`Could not check the PIN: ${secretError.message}`);
   const correct = secret ? await verifyPin(pin, secret.pin_hash) : false;
 
-  await service.from("admin_login_attempts").insert({ ip, succeeded: correct });
+  // The attempt was recorded as a failure; mark it as succeeded only when the PIN matched.
+  if (correct) await service.from("admin_login_attempts").update({ succeeded: true }).eq("id", attempt.attempt_id);
   await service.from("admin_login_attempts").delete().lt("created_at", new Date(Date.now() - 7 * 86_400_000).toISOString());
 
   if (!correct) {
-    const left = MAX_FAILURES_PER_IP - (perIp.count ?? 0) - 1;
+    const left = MAX_FAILURES_PER_IP - attempt.ip_failures;
     return {
       status: "error",
       message: left > 0 ? `That PIN is not correct. ${left} ${left === 1 ? "try" : "tries"} left before a short lockout.` : "That PIN is not correct.",
@@ -113,7 +128,7 @@ export async function signOut() {
 const pinChangeSchema = z
   .object({
     current: z.string().regex(PIN_PATTERN, "Enter your current PIN."),
-    pin: z.string().regex(/^d{6,12}$/, "Use 6 to 12 digits."),
+    pin: z.string().regex(/^\d{6,12}$/, "Use 6 to 12 digits."),
     confirm: z.string(),
   })
   .refine((value) => value.pin === value.confirm, { message: "The PINs do not match.", path: ["confirm"] });
