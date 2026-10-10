@@ -1,0 +1,705 @@
+@import "tailwindcss";
+
+/*
+  Anoka Advisors design tokens.
+  The public site is dark: deep apothecary green with brass-gold accents.
+  The admin area keeps the light "paper" palette for long working sessions.
+*/
+@theme {
+  /* Site (dark) */
+  --color-night: #0a1310;
+  --color-deep: #0e1915;
+  --color-panel: #13211c;
+  --color-panel-2: #192b25;
+  --color-line: #253831;
+  --color-line-strong: #34503f;
+  --color-fg: #ebf1ed;
+  --color-fg-muted: #a9b8b1;
+  --color-fg-soft: #849790;
+  --color-gold: #d8b77e;
+  --color-gold-strong: #ebcd99;
+  --color-mint: #86bfae;
+
+  /* Admin (light) */
+  --color-paper: #f6f7f5;
+  --color-mist: #ecf0ed;
+  --color-sage: #d5dfd9;
+  --color-ink: #17241f;
+  --color-slate: #4d5b55;
+  --color-evergreen: #1e3b33;
+  --color-evergreen-hover: #2b5247;
+  --color-teal: #4f7f72;
+  --color-brass: #a8834a;
+  --color-brass-light: #d6b880;
+  --color-danger: #9b2c2c;
+  --color-danger-tint: #f7e8e6;
+  --color-success: #2f6b4f;
+  --color-success-tint: #e3efe8;
+
+  --text-display: clamp(2.6rem, 1.5rem + 4.6vw, 5.25rem);
+  --text-display--line-height: 1.02;
+  --text-section: clamp(2rem, 1.45rem + 2.1vw, 3.25rem);
+  --text-section--line-height: 1.08;
+  --text-lede: clamp(1.125rem, 1.04rem + 0.4vw, 1.3125rem);
+  --text-lede--line-height: 1.6;
+
+  --animate-marquee: marquee 38s linear infinite;
+}
+
+@theme inline {
+  --font-serif: var(--font-newsreader), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+    background: var(--color-night);
+  }
+
+  body {
+    background: var(--color-night);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-optical-sizing: auto;
+    letter-spacing: -0.014em;
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-gold) 35%, transparent);
+    color: #fff;
+  }
+
+  summary {
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@layer components {
+  .page-container {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 78rem;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .page-container {
+      padding-inline: 2rem;
+    }
+  }
+
+  .site {
+    color-scheme: dark;
+    /* Decorative glows may extend past the edge; never let them cause sideways scrolling. */
+    overflow-x: clip;
+  }
+
+  .admin {
+    color-scheme: light;
+    color: var(--color-ink);
+  }
+
+  /* Buttons */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.975rem;
+    line-height: 1.2;
+    text-decoration: none;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      background-color 200ms ease,
+      border-color 200ms ease,
+      color 200ms ease,
+      transform 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  /* Gold call to action with a light sweep on hover */
+  .btn-gold {
+    background: var(--color-gold);
+    color: var(--color-night);
+    box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--color-gold) 70%, transparent);
+  }
+
+  .btn-gold::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(110deg, transparent 25%, rgb(255 255 255 / 0.45) 50%, transparent 75%);
+    transform: translateX(-120%);
+    transition: transform 700ms ease;
+  }
+
+  .btn-gold:hover {
+    background: var(--color-gold-strong);
+    box-shadow: 0 14px 36px -12px color-mix(in srgb, var(--color-gold) 85%, transparent);
+  }
+
+  .btn-gold:hover::after {
+    transform: translateX(120%);
+  }
+
+  .btn-ghost {
+    color: var(--color-fg);
+    border: 1px solid rgb(235 241 237 / 0.28);
+    background: rgb(235 241 237 / 0.04);
+    backdrop-filter: blur(6px);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold-strong);
+    background: rgb(216 183 126 / 0.08);
+  }
+
+  /* Admin buttons (light theme) */
+  .btn-primary {
+    border-radius: 4px;
+    background: var(--color-evergreen);
+    color: #fff;
+    border: 1px solid var(--color-evergreen);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-evergreen-hover);
+    border-color: var(--color-evergreen-hover);
+  }
+
+  .btn-secondary {
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-evergreen);
+    border: 1px solid color-mix(in srgb, var(--color-evergreen) 45%, transparent);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--color-evergreen);
+    background: color-mix(in srgb, var(--color-evergreen) 5%, transparent);
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .text-link {
+    color: var(--color-gold);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-gold) 40%, transparent);
+  }
+
+  .text-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .admin .text-link {
+    color: var(--color-evergreen);
+    text-decoration-color: color-mix(in srgb, var(--color-evergreen) 35%, transparent);
+  }
+
+  .admin :focus-visible {
+    outline-color: var(--color-evergreen);
+  }
+
+  /* Small label above a heading, sentence case */
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-gold);
+  }
+
+  .kicker::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+  }
+
+  /* Forms */
+  .field-label {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+  }
+
+  .field-hint {
+    font-weight: 400;
+    color: var(--color-slate);
+  }
+
+  .field-input {
+    display: block;
+    width: 100%;
+    min-height: 2.875rem;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid #b9c6bf;
+    border-radius: 4px;
+    background: #fff;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 1rem;
+  }
+
+  .field-input:focus-visible {
+    outline: 2px solid var(--color-evergreen);
+    outline-offset: 1px;
+    border-color: var(--color-evergreen);
+  }
+
+  .field-input[aria-invalid="true"] {
+    border-color: var(--color-danger);
+  }
+
+  .field-error {
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--color-danger);
+  }
+
+  .site .field-hint {
+    color: var(--color-fg-soft);
+  }
+
+  .site .field-input {
+    background: var(--color-deep);
+    border-color: var(--color-line-strong);
+    color: var(--color-fg);
+    border-radius: 10px;
+  }
+
+  .site .field-input::placeholder {
+    color: var(--color-fg-soft);
+  }
+
+  .site .field-input:focus-visible {
+    outline-color: var(--color-gold);
+    border-color: var(--color-gold);
+  }
+
+  .site .field-input[aria-invalid="true"] {
+    border-color: #e08a7f;
+  }
+
+  .site .field-error {
+    color: #f0a59b;
+  }
+
+  .site select.field-input option {
+    background: var(--color-deep);
+    color: var(--color-fg);
+  }
+
+  /* Cards and surfaces */
+  .card {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.035), rgb(255 255 255 / 0.01));
+    border: 1px solid var(--color-line);
+    border-radius: 18px;
+  }
+
+  .glass {
+    background: rgb(10 19 16 / 0.62);
+    border: 1px solid rgb(235 241 237 / 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  /* Image frame with an offset gold outline */
+  .frame {
+    position: relative;
+    border-radius: 22px;
+  }
+
+  .frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translate(14px, 14px);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
+    border-radius: 22px;
+    z-index: 0;
+    transition: transform 600ms ease;
+  }
+
+  .frame:hover::before {
+    transform: translate(8px, 8px);
+  }
+
+  .frame-reverse::before {
+    transform: translate(-14px, 14px);
+  }
+
+  .frame-reverse:hover::before {
+    transform: translate(-8px, 8px);
+  }
+
+  /* Long-form articles in the Insights hub */
+  .article-prose {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--color-fg-muted);
+  }
+
+  .article-prose > * + * {
+    margin-top: 1.25rem;
+  }
+
+  .article-prose h2 {
+    margin-top: 3.25rem;
+    font-size: clamp(1.75rem, 1.5rem + 0.9vw, 2.25rem);
+    line-height: 1.15;
+    color: var(--color-fg);
+    scroll-margin-top: 7rem;
+  }
+
+  .article-prose h3 {
+    margin-top: 2rem;
+    font-size: 1.4rem;
+    line-height: 1.25;
+    color: var(--color-fg);
+  }
+
+  .article-prose strong {
+    color: var(--color-fg);
+    font-weight: 600;
+  }
+
+  .article-prose a {
+    color: var(--color-gold);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-gold) 40%, transparent);
+  }
+
+  .article-prose a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .article-prose ul,
+  .article-prose ol {
+    padding-left: 1.4rem;
+  }
+
+  .article-prose ul {
+    list-style: disc;
+  }
+
+  .article-prose ol {
+    list-style: decimal;
+  }
+
+  .article-prose li + li {
+    margin-top: 0.5rem;
+  }
+
+  .article-prose li::marker {
+    color: var(--color-gold);
+  }
+
+  .article-prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
+
+  .article-prose th,
+  .article-prose td {
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.75rem 0.75rem 0.75rem 0;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .article-prose th {
+    color: var(--color-fg);
+    font-weight: 600;
+  }
+
+  .legal-prose h2 {
+    font-size: 1.625rem;
+    margin-top: 2.75rem;
+    margin-bottom: 0.875rem;
+    scroll-margin-top: 7rem;
+  }
+
+  .legal-prose h3 {
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-prose p,
+  .legal-prose ul {
+    margin-bottom: 1rem;
+    color: var(--color-fg-muted);
+  }
+
+  .legal-prose strong {
+    color: var(--color-fg);
+  }
+
+  .legal-prose ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+
+  .legal-prose li {
+    margin-bottom: 0.375rem;
+  }
+
+  .legal-prose a {
+    color: var(--color-gold);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion
+   --------------------------------------------------------------------------- */
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1.14) translate3d(-1.5%, 1%, 0);
+  }
+  to {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -6%, 0) scale(1.12);
+  }
+}
+
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pathway-draw-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pathway-draw-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes pathway-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.kenburns {
+  animation: kenburns 12s ease-out both;
+}
+
+.rise {
+  animation: rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+.glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(80px);
+  opacity: 0.45;
+  animation: drift 18s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.slide-progress {
+  transform-origin: left;
+  animation: progress var(--slide-ms, 7000ms) linear both;
+}
+
+/* Scroll reveal: hidden only once the observer has started, so content never depends on JavaScript.
+   The observer animates each element in with the Web Animations API (fill: both overrides these). */
+.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+.reveal-on [data-reveal="left"] {
+  transform: translateX(-48px);
+}
+
+.reveal-on [data-reveal="right"] {
+  transform: translateX(48px);
+}
+
+.reveal-on [data-reveal="zoom"] {
+  transform: scale(0.94);
+}
+
+/* Care pathway */
+.pathway-rail {
+  transform-origin: top;
+  animation: pathway-draw-y 1100ms cubic-bezier(0.3, 0.7, 0.2, 1) both;
+}
+
+.pathway-stop {
+  animation: pathway-appear 500ms ease-out both;
+  animation-delay: calc(300ms + var(--i, 0) * 120ms);
+}
+
+.pathway-span {
+  transform-origin: top;
+  animation: pathway-draw-y 800ms cubic-bezier(0.3, 0.7, 0.2, 1) both;
+  animation-delay: calc(1100ms + var(--i, 0) * 180ms);
+}
+
+/* Wait for the reveal observer, which plays these when the pathway scrolls into view. */
+.reveal-on [data-reveal] .pathway-rail,
+.reveal-on [data-reveal] .pathway-stop,
+.reveal-on [data-reveal] .pathway-span {
+  animation-play-state: paused;
+}
+
+@media (min-width: 48rem) {
+  .pathway-rail,
+  .pathway-span {
+    transform-origin: left;
+    animation-name: pathway-draw-x;
+  }
+}
+
+/* Scroll-linked effects where the browser supports them */
+@supports (animation-timeline: view()) {
+  @keyframes parallax {
+    from {
+      transform: translateY(-9%) scale(1.18);
+    }
+    to {
+      transform: translateY(9%) scale(1.18);
+    }
+  }
+
+  .parallax {
+    animation: parallax linear both;
+    animation-timeline: view();
+  }
+
+  .scroll-progress {
+    animation: progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-on [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .parallax,
+  .kenburns,
+  .glow {
+    animation: none !important;
+    transform: none;
+  }
+}

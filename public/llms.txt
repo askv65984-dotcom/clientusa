@@ -1,0 +1,27 @@
+# Anoka Advisors
+
+> Anoka Advisors is a US consulting firm for healthcare, telehealth and pharmacy operations. It works with medical practices, clinics, telehealth programs, health systems and pharmacies across the United States, mostly by video. Contact: info@anokaadvisors.com.
+
+## Services
+
+- [Healthcare operations consulting](https://anokaadvisors.com/services/healthcare-operations-consulting): patient access and scheduling, front desk and check-in, clinical workflow, staffing, performance reporting and compliance-ready SOPs for practices and clinics.
+- [Telehealth consulting](https://anokaadvisors.com/services/telehealth-consulting): program design, platform and vendor selection, virtual visit workflows, multi-state planning, reimbursement readiness and launch support.
+- [Pharmacy operations consulting](https://anokaadvisors.com/services/pharmacy-operations-consulting): dispensing workflow, inventory and purchasing, staffing, inspection readiness, accreditation preparation and new services for independent, specialty, long-term care and telepharmacy operations.
+
+## Working with Anoka Advisors
+
+- [Packages and fees](https://anokaadvisors.com/pricing): fixed-fee Operations Diagnostic, monthly advisory retainer and focused projects, purchasable online through Stripe.
+- [Book a consultation](https://anokaadvisors.com/book): request an initial video consultation, or book a paid diagnostic call online and choose a time on the calendar.
+- [About](https://anokaadvisors.com/about): firm focus and working principles.
+- [Contact](https://anokaadvisors.com/contact)
+
+## Insights
+
+- [How to reduce patient no-shows](https://anokaadvisors.com/insights/reduce-patient-no-shows): measuring no-shows by segment, shortening lead times, two-way reminders, backfilling and fair policies.
+- [Patient access metrics every practice should track](https://anokaadvisors.com/insights/patient-access-metrics): third next available appointment, phone access, fill rate, referrals and a monthly scorecard.
+- [How to choose a telehealth platform](https://anokaadvisors.com/insights/choose-telehealth-platform): requirements, scripted demos, weighted scorecards, total cost and contracts.
+- [Telehealth workflow design](https://anokaadvisors.com/insights/telehealth-workflow-design): scheduling rules, intake and consent, virtual rooming, documentation, prescriptions and follow-up.
+- [Pharmacy workflow optimization](https://anokaadvisors.com/insights/pharmacy-workflow-optimization): time studies, bottlenecks, roles, medication synchronization and the pickup front end.
+- [Pharmacy inspection readiness checklist](https://anokaadvisors.com/insights/pharmacy-inspection-readiness): licenses, SOPs, controlled substances, storage, compounding records and mock inspections.
+
+Anoka Advisors provides operations consulting and does not provide legal, medical, billing or tax advice.
