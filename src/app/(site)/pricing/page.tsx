@@ -113,7 +113,7 @@ export default async function PricingPage() {
         title="Consulting packages and fees"
         lede="Every package has a fixed fee and a clear list of what is included. If you would rather talk first, request an initial consultation."
       >
-        <a href="#packages" className="btn btn-gold">
+        <a href="#packages" className="btn btn-accent">
           Compare packages
         </a>
         <Link href="/book#initial" className="btn btn-ghost">
@@ -122,7 +122,7 @@ export default async function PricingPage() {
       </PageHero>
 
       {/* 2 */}
-      <SplitSection image="pr-intro" kicker="Transparent pricing" title="Know the cost before you commit">
+      <SplitSection image="pr-intro" title="Know the cost before you commit">
         <p>
           Consulting fees are often hidden behind proposals and follow-up meetings. We publish ours, so you can decide
           quickly and budget with confidence.
@@ -131,10 +131,9 @@ export default async function PricingPage() {
       </SplitSection>
 
       {/* 3 */}
-      <section id="packages" aria-labelledby="packages-heading" className="relative isolate scroll-mt-24 overflow-hidden bg-deep py-20 md:py-28">
-        <div aria-hidden="true" className="glow left-1/2 top-10 -z-10 size-[30rem] -translate-x-1/2 bg-gold/15" />
+      <section id="packages" aria-labelledby="packages-heading" className="scroll-mt-24 bg-deep py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading center kicker="Packages" title="Choose your package" id="packages-heading" />
+          <SectionHeading center title="Choose your package" id="packages-heading" />
           <div className="mt-14">
             <FeeSchedule packages={packages} />
           </div>
@@ -142,7 +141,7 @@ export default async function PricingPage() {
       </section>
 
       {/* 4 */}
-      <SplitSection image="pr-compare" kicker="Which fits?" title="Which package is right for you?">
+      <SplitSection image="pr-compare" title="Which package is right for you?">
         <p>
           Every package applies to our{" "}
           <Link href="/services/healthcare-operations-consulting" className="text-link">
@@ -158,10 +157,10 @@ export default async function PricingPage() {
           </Link>{" "}
           consulting.
         </p>
-        <dl className="space-y-5">
+        <dl className="space-y-3">
           {fit.map((item) => (
-            <div key={item.title} className="rounded-2xl border border-line bg-panel/60 p-5">
-              <dt className="font-serif text-[1.375rem] text-fg">{item.title}</dt>
+            <div key={item.title} className="shape-bubble bg-panel px-6 py-5">
+              <dt className="font-serif text-[1.375rem] font-medium text-fg">{item.title}</dt>
               <dd className="mt-1">{item.body}</dd>
             </div>
           ))}
@@ -169,20 +168,20 @@ export default async function PricingPage() {
       </SplitSection>
 
       {/* 5 */}
-      <SplitSection image="pr-included" reverse tone="deep" kicker="Every engagement" title="Included whichever package you choose">
+      <SplitSection image="pr-included" reverse tone="walnut" title="Included whichever package you choose">
         <CheckList items={included} columns={2} />
       </SplitSection>
 
       {/* 6 */}
       <section className="page-container py-20 md:py-28">
-        <SectionHeading kicker="After checkout" title="What happens after you buy" />
+        <SectionHeading title="What happens after you buy" />
         <div className="mt-12">
           <Steps steps={afterPurchase} />
         </div>
       </section>
 
       {/* 7 */}
-      <SplitSection image="pr-security" tone="deep" kicker="Secure payments" title="Your payment details stay with Stripe">
+      <SplitSection image="pr-security" tone="deep" title="Your payment details stay with Stripe">
         <p>
           Checkout runs on Stripe, a payment processor trusted by millions of businesses. Card details go straight to
           Stripe and are never stored on our systems.
@@ -191,7 +190,7 @@ export default async function PricingPage() {
       </SplitSection>
 
       {/* 8 */}
-      <SplitSection image="pr-invoice" reverse kicker="For organizations" title="Need a purchase order or invoice?">
+      <SplitSection image="pr-invoice" reverse title="Need a purchase order or invoice?">
         <p>
           Health systems and larger organizations often need to pay through accounts payable. Tell us in a message
           and we will arrange invoicing that fits your process.
@@ -205,13 +204,12 @@ export default async function PricingPage() {
       <PhotoBand image="bk-video">
         <div className="page-container py-20 md:py-28">
           <div data-reveal className="max-w-3xl">
-            <p className="kicker">Not sure yet?</p>
-            <h2 className="mt-4 text-section text-fg">Talk to us first</h2>
+            <h2 className="text-section text-fg">Not sure yet? Talk to us first</h2>
             <p className="mt-5 text-lede text-fg-muted">
               Request an initial consultation by video. Tell us what is happening, and we will recommend the package
               that fits, or tell you honestly if we are not the right fit.
             </p>
-            <Link href="/book#initial" className="btn btn-gold mt-9">
+            <Link href="/book#initial" className="btn btn-accent mt-9">
               Request an initial consultation
             </Link>
           </div>

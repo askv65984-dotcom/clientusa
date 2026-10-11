@@ -17,7 +17,7 @@ export default function CheckoutCanceledPage() {
       title="Checkout canceled"
       lede="You have not been charged. If you have questions about a package before buying, send us a message and we will get back to you."
     >
-      <Link href="/pricing#packages" className="btn btn-gold">
+      <Link href="/pricing#packages" className="btn btn-accent">
         Back to packages
       </Link>
       <Link href="/book" className="btn btn-ghost">

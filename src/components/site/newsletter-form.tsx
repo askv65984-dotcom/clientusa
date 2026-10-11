@@ -11,7 +11,7 @@ export function NewsletterForm() {
 
   if (state.status === "success") {
     return (
-      <p role="status" className="rounded-2xl border border-gold/40 bg-gold/10 px-5 py-4 text-fg">
+      <p role="status" className="rounded-2xl border border-accent/40 bg-accent/10 px-5 py-4 text-fg">
         {state.message}
       </p>
     );
@@ -32,9 +32,9 @@ export function NewsletterForm() {
           placeholder="you@organization.com"
           aria-invalid={state.status === "error"}
           aria-describedby={state.status === "error" ? "newsletter-error" : undefined}
-          className="min-h-12 flex-1 rounded-full border border-line-strong bg-night/60 px-5 text-fg placeholder:text-fg-soft focus-visible:border-gold"
+          className="min-h-12 flex-1 rounded-full border border-line-strong bg-deep px-5 text-fg placeholder:text-fg-soft focus-visible:border-accent"
         />
-        <SubmitButton label="Subscribe" pendingLabel="Subscribing…" className="btn btn-gold" />
+        <SubmitButton label="Subscribe" pendingLabel="Subscribing…" className="btn btn-accent" />
       </div>
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label htmlFor="newsletter-company">Leave this field empty</label>

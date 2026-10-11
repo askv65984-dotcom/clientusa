@@ -21,7 +21,7 @@ export default function NotFound() {
           title="This page could not be found"
           lede="The link may be out of date, or the page may have moved. These are good places to continue."
         >
-          <Link href="/" className="btn btn-gold">
+          <Link href="/" className="btn btn-accent">
             Go to the home page
           </Link>
           <Link href="/services" className="btn btn-ghost">

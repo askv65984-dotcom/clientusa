@@ -1,25 +1,29 @@
 import type { Metadata } from "next";
+import { getImageProps } from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { CarePathway } from "@/components/site/care-pathway";
 import { Carousel } from "@/components/site/carousel";
 import { CountUp } from "@/components/site/count-up";
 import { FeeSchedule } from "@/components/site/fee-schedule";
-import { HeroSlider, type HeroSlide } from "@/components/site/hero-slider";
+import { HeroVideo } from "@/components/site/hero-video";
 import { InsightCard } from "@/components/site/insight-card";
 import { JsonLd } from "@/components/site/json-ld";
 import { Photo, type PhotoKey } from "@/components/site/photo";
 import {
   ArrowIcon,
   CheckList,
+  ConversationSection,
   CtaBand,
   FaqSection,
   ImageCard,
   Marquee,
-  PhotoBand,
+  RevealWords,
   SectionHeading,
   SplitSection,
   Steps,
+  practiceTone,
+  revealEnd,
   type ImageCardItem,
 } from "@/components/site/sections";
 import { insights } from "@/content/insights";
@@ -36,34 +40,13 @@ export const metadata: Metadata = pageMetadata({
   path: "/",
 });
 
-const slides: HeroSlide[] = [
-  {
-    label: "Healthcare operations",
-    title: "Fewer bottlenecks between the first phone call and the exam room.",
-    body: "Patient access, scheduling, clinical workflow and staffing for practices and clinics.",
-    href: "/services/healthcare-operations-consulting",
-  },
-  {
-    label: "Telehealth",
-    title: "Virtual care that runs as smoothly as an in-person visit.",
-    body: "Program design, platform selection, virtual visit workflows and launch support.",
-    href: "/services/telehealth-consulting",
-  },
-  {
-    label: "Pharmacy operations",
-    title: "Steadier days behind the pharmacy counter.",
-    body: "Dispensing workflow, inventory, staffing and inspection readiness.",
-    href: "/services/pharmacy-operations-consulting",
-  },
-];
-
-type Tile = { image: PhotoKey; title: string; tagline: string; href: string };
+type Tile = { image: PhotoKey; title: string; tagline: string; href: string; practice?: boolean };
 
 // "What we do": the three practice areas large, then the ways to work with us.
 const practiceTiles: Tile[] = [
-  { image: "svc-row-healthcare", title: "Healthcare operations", tagline: "Access, workflow, staffing and reporting.", href: "/services/healthcare-operations-consulting" },
-  { image: "th-overview", title: "Telehealth", tagline: "Virtual care that runs like an in-person visit.", href: "/services/telehealth-consulting" },
-  { image: "svc-row-pharmacy", title: "Pharmacy operations", tagline: "Steadier days behind the counter.", href: "/services/pharmacy-operations-consulting" },
+  { image: "svc-row-healthcare", title: "Healthcare operations", tagline: "Access, workflow, staffing and reporting.", href: "/services/healthcare-operations-consulting", practice: true },
+  { image: "th-overview", title: "Telehealth", tagline: "Virtual care that runs like an in-person visit.", href: "/services/telehealth-consulting", practice: true },
+  { image: "svc-row-pharmacy", title: "Pharmacy operations", tagline: "Steadier days behind the counter.", href: "/services/pharmacy-operations-consulting", practice: true },
 ];
 const offerTiles: Tile[] = [
   { image: "th-approach", title: "Initial consultation", tagline: "Start with a conversation, by video.", href: "/book#initial" },
@@ -78,16 +61,17 @@ const wideTiles: Tile[] = [
 /** Tall, pill-shaped card for the phone slider, with a round arrow button in the corner. */
 function PillTile({ tile }: { tile: Tile }) {
   return (
-    <Link href={tile.href} className="group relative isolate block aspect-[4/7] overflow-hidden rounded-[2.75rem] no-underline">
+    <Link href={tile.href} className="theme-dark soft-shadow group relative isolate block aspect-[4/7] overflow-hidden rounded-[2.75rem] no-underline">
       <Photo name={tile.image} alt="" sizes="80vw" className="-z-10 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
-      <div className="absolute inset-0 -z-10 bg-linear-to-t from-black/90 via-black/35 to-black/10" />
+      <div className="absolute inset-0 -z-10 bg-linear-to-t from-base via-base/40 to-transparent" />
       <span
         aria-hidden="true"
-        className="absolute top-6 right-6 grid size-12 place-items-center rounded-full border-2 border-white/80 text-white transition-colors group-hover:border-gold group-hover:bg-gold group-hover:text-night"
+        className="absolute top-6 right-6 grid size-12 place-items-center rounded-full bg-base/80 text-accent transition-colors group-hover:bg-accent group-hover:text-on-accent"
       >
         <ArrowIcon className="size-5" />
       </span>
       <div className="absolute inset-x-0 bottom-0 px-7 pb-9">
+        {tile.practice ? <span aria-hidden="true" className={`mb-3 block size-3 rounded-full bg-[var(--tone)] ${practiceTone(tile.title)}`} /> : null}
         <h3 className="font-sans text-[1.75rem] leading-[1.12] font-bold tracking-[-0.015em] text-fg">{tile.title}</h3>
         <p className="mt-3 text-[1.0625rem] leading-snug text-fg/85">{tile.tagline}</p>
       </div>
@@ -102,7 +86,7 @@ function TileLink({ tile, size, index }: { tile: Tile; size: "large" | "small" |
       href={tile.href}
       data-reveal
       style={delay(index * 80)}
-      className={`group relative isolate block overflow-hidden rounded-[22px] border border-line no-underline transition-colors duration-300 hover:border-gold/60 ${ratio}`}
+      className={`theme-dark soft-shadow group relative isolate block overflow-hidden rounded-[1.75rem] no-underline transition-transform duration-300 hover:-translate-y-1 ${ratio}`}
     >
       <Photo
         name={tile.image}
@@ -110,11 +94,12 @@ function TileLink({ tile, size, index }: { tile: Tile; size: "large" | "small" |
         sizes={size === "small" ? "(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw" : "(min-width: 1024px) 45vw, 92vw"}
         className="-z-10 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
       />
-      <div className="absolute inset-0 -z-10 bg-linear-to-t from-black/85 via-black/30 to-black/5" />
+      <div className="absolute inset-0 -z-10 bg-linear-to-t from-base via-base/30 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
-        <h3 className={`flex items-center gap-2 font-sans font-semibold tracking-[-0.01em] text-fg ${size === "small" ? "text-[1.25rem]" : "text-[1.5rem] md:text-[1.75rem]"}`}>
+        <h3 className={`flex items-center gap-2.5 font-sans font-bold tracking-[-0.01em] text-fg ${size === "small" ? "text-[1.25rem]" : "text-[1.5rem] md:text-[1.75rem]"}`}>
+          {tile.practice ? <span aria-hidden="true" className={`size-3 shrink-0 rounded-full bg-[var(--tone)] ${practiceTone(tile.title)}`} /> : null}
           {tile.title}
-          <ArrowIcon className="size-4 -translate-x-1 text-gold opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+          <ArrowIcon className="size-4 -translate-x-1 text-accent opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
         </h3>
         <p className="mt-1 text-[0.975rem] text-fg/80">{tile.tagline}</p>
       </div>
@@ -166,10 +151,53 @@ const principles = [
 
 const delay = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
+const heroTitle = "Healthcare operations that work for your staff and your patients.";
+
+// The first frame of each hero video, shown at once and kept as the still for reduced motion.
+const {
+  props: { srcSet: posterWide },
+} = getImageProps({ src: "/videos/hero-wide.webp", alt: "", width: 1920, height: 1080, sizes: "100vw", fetchPriority: "high" });
+const { props: poster } = getImageProps({ src: "/videos/hero-square.webp", alt: "", width: 900, height: 900, sizes: "100vw", fetchPriority: "high" });
+
+const iconProps = { viewBox: "0 0 20 20", className: "size-5", fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round", strokeLinejoin: "round" } as const;
+
+const welcomeNotes = [
+  {
+    title: "Video consultations, booked online",
+    body: "Pick a time that suits you and join from your browser.",
+    icon: (
+      <svg {...iconProps}>
+        <rect x="2.5" y="5" width="11" height="10" rx="2" />
+        <path d="M13.5 9l4-2.5v7l-4-2.5" />
+      </svg>
+    ),
+  },
+  {
+    title: "Fixed, published fees",
+    body: "Every package lists what it includes and what it costs.",
+    icon: (
+      <svg {...iconProps}>
+        <path d="M3 10.5V4a1 1 0 011-1h6.5L17 9.5 10.5 16z" />
+        <circle cx="7" cy="7" r="1.25" />
+      </svg>
+    ),
+  },
+  {
+    title: "Remote or on site",
+    body: "We work with teams in every US state.",
+    icon: (
+      <svg {...iconProps}>
+        <path d="M10 17.5s5.5-5 5.5-9.25a5.5 5.5 0 10-11 0C4.5 12.5 10 17.5 10 17.5z" />
+        <circle cx="10" cy="8.25" r="2" />
+      </svg>
+    ),
+  },
+];
+
 export default async function HomePage() {
   const [packages, consultation] = await Promise.all([getActivePackages(), getConsultationPackage()]);
   // The paid session length comes from admin, for example "90-minute session and written summary".
-  const minutes = Number(consultation?.duration_label.match(/(d+)[-s]*min/i)?.[1] ?? 0);
+  const minutes = Number(consultation?.duration_label.match(/(\d+)[-\s]*min/i)?.[1] ?? 0);
   const figures = [
     stats[0],
     minutes > 0
@@ -180,48 +208,64 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* 1. Hero slider */}
-      <HeroSlider
-        slides={slides}
-        backgrounds={[
-          <Photo key="1" name="home-hero-1" alt="" priority sizes="100vw" className="object-cover" />,
-          <Photo key="2" name="home-hero-2" alt="" sizes="100vw" className="object-cover" />,
-          <Photo key="3" name="home-hero-3" alt="" sizes="100vw" className="object-cover" />,
-        ]}
-      >
-        <p className="kicker rise">Healthcare operations consulting, nationwide</p>
-        <h1 className="rise mt-6 max-w-[19ch] text-[clamp(2.6rem,1.5rem+3.4vw,4.6rem)] leading-[1.03] text-fg" style={delay(120)}>
-          Operations consulting for healthcare, telehealth and pharmacy.
-        </h1>
-        <p className="rise mt-7 max-w-[40rem] text-lede text-fg-muted" style={delay(260)}>
-          We help practice leaders, virtual care teams and pharmacy owners fix the workflows behind patient access,
-          prescriptions and compliance, so the work gets easier for staff and clearer for patients.
-        </p>
-        <div className="rise mt-9 flex flex-wrap gap-3" style={delay(400)}>
-          <Link href="/book" className="btn btn-gold">
-            Book a consultation
-          </Link>
-          <Link href="/pricing" className="btn btn-ghost">
-            See packages and fees
-          </Link>
+      {/* 1. Hero: a looping 3D animation, with the words beside it */}
+      <section aria-labelledby="hero-heading" className="theme-dark relative isolate overflow-hidden bg-base pt-[56svh] pb-28 lg:flex lg:min-h-[100svh] lg:items-center lg:pt-32 lg:pb-36">
+        <picture>
+          <source media="(min-width: 1024px)" srcSet={posterWide} />
+          {/* Art-directed poster from getImageProps: the wide frame on desktops, the square one on phones. */}
+          <img {...poster} alt="" className="hero-media-box absolute inset-x-0 top-0 -z-10 w-full object-cover" />
+        </picture>
+        <HeroVideo />
+        <div
+          aria-hidden="true"
+          className="hero-media-shade absolute inset-x-0 top-0 -z-10 bg-linear-to-t from-base from-10% via-transparent via-50% to-transparent lg:bg-linear-to-l lg:from-base/95 lg:from-0% lg:via-base/45 lg:via-50%"
+        />
+        <div className="page-container grid w-full lg:grid-cols-12">
+          <div className="lg:col-span-6 lg:col-start-7">
+            <h1 id="hero-heading" className="max-w-[18ch] text-[clamp(2.6rem,1.4rem+3.1vw,4.25rem)] leading-[1.06] font-semibold text-fg">
+              <RevealWords text={heroTitle} start={200} />
+            </h1>
+            <p className="rise mt-7 max-w-[36rem] text-lede text-fg/85" style={delay(revealEnd(heroTitle, 200) + 80)}>
+              Anoka Advisors is an operations consulting partner for medical practices, telehealth programs and
+              pharmacies. We help you untangle the workflows behind patient access, prescriptions and compliance, so
+              the days run calmer for your team and care feels clearer for patients.
+            </p>
+            <div className="rise mt-9 flex flex-wrap gap-3" style={delay(revealEnd(heroTitle, 200) + 220)}>
+              <Link href="/book" className="btn btn-accent">
+                Book a consultation
+              </Link>
+              <Link href="/pricing" className="btn btn-ghost">
+                See packages and fees
+              </Link>
+            </div>
+          </div>
         </div>
-        <ul className="rise mt-10 flex flex-wrap gap-x-7 gap-y-3 text-[0.9375rem] text-fg-muted" style={delay(540)}>
-          {["Video consultations booked online", "Fixed, published fees", "Remote or on site"].map((item) => (
-            <li key={item} className="flex items-center gap-2">
-              <span aria-hidden="true" className="size-1.5 rotate-45 bg-gold" />
-              {item}
+      </section>
+
+      {/* A card of reassurances that rises over the bottom of the hero */}
+      <div className="page-container relative z-10 -mt-16 mb-14 md:-mt-20 md:mb-20">
+        <ul className="rise soft-shadow grid gap-6 rounded-[1.75rem] bg-panel px-6 py-7 sm:grid-cols-3 md:rounded-[2.25rem] md:px-10 md:py-9" style={delay(500)}>
+          {welcomeNotes.map((note) => (
+            <li key={note.title} className="flex gap-4">
+              <span aria-hidden="true" className="mt-1 grid size-10 shrink-0 place-items-center rounded-full bg-accent/12 text-accent">
+                {note.icon}
+              </span>
+              <div>
+                <p className="font-bold text-fg">{note.title}</p>
+                <p className="mt-1 text-[1rem] leading-relaxed text-fg-muted">{note.body}</p>
+              </div>
             </li>
           ))}
         </ul>
-      </HeroSlider>
+      </div>
 
       {/* 2. Focus strip */}
       <Marquee items={["Patient access", "Clinical workflow", "Telehealth launch", "Platform selection", "Dispensing workflow", "Inventory", "Inspection readiness", "Staffing models", "Performance reporting"]} />
 
       {/* 3. Introduction */}
-      <SplitSection image="home-intro" kicker="Who we are" title="Operations advice from people who know how care actually runs">
-        <p>
-          Anoka Advisors is an independent consulting firm focused on the operational side of care:{" "}
+      <SplitSection image="home-intro" title="Hello, we’re Anoka Advisors.">
+        <p className="text-lede text-fg">
+          We’re an independent consulting firm focused on the operational side of care:{" "}
           <Link href="/services/healthcare-operations-consulting" className="text-link">
             how patients get scheduled and seen
           </Link>
@@ -246,27 +290,27 @@ export default async function HomePage() {
       </SplitSection>
 
       {/* 4. Patient pathway */}
-      <PhotoBand image="home-pathway">
-        <div className="page-container py-20 md:py-28">
-          <SectionHeading kicker="The whole path" title="Where our three practice areas meet" />
-          <div data-reveal className="mt-12 rounded-[24px] border border-line bg-night/60 p-6 backdrop-blur md:p-10">
+      <section className="bg-deep py-20 md:py-28">
+        <div className="page-container">
+          <SectionHeading title="Every patient takes one path. We help with all of it." />
+          <div data-reveal className="mt-10">
             <CarePathway />
           </div>
         </div>
-      </PhotoBand>
+      </section>
 
       {/* 5. What we do */}
       <section aria-labelledby="what-we-do" className="page-container py-20 md:py-28">
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div className="max-w-2xl">
             <h2 id="what-we-do" className="text-section text-fg">
-              What we do
+              How we can help
             </h2>
             <p className="mt-4 text-lede text-fg-muted">
               Three practice areas, one view of the patient&rsquo;s path, and simple ways to start working together.
             </p>
           </div>
-          <Link href="/services" className="group inline-flex items-center gap-2 font-semibold text-gold no-underline hover:text-gold-strong">
+          <Link href="/services" className="group inline-flex items-center gap-2 font-bold text-accent no-underline hover:text-accent-strong">
             All services
             <ArrowIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
@@ -304,22 +348,27 @@ export default async function HomePage() {
       {/* 6. Who we work with */}
       <section className="overflow-hidden bg-deep py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading kicker="Who we work with" title="Built for the organizations that keep care running" />
+          <SectionHeading title="The people we work alongside" />
           <div data-reveal className="mt-12">
             <Carousel label="Organizations we work with">
               {audiences.map((item) => (
-                <ImageCard key={item.title} item={item} ratio="aspect-[4/5]" />
+                <ImageCard key={item.title} item={item} ratio="aspect-[5/4]" />
               ))}
             </Carousel>
           </div>
         </div>
       </section>
 
-      {/* 7. Problems we solve */}
-      <SplitSection image="home-problems" reverse kicker="Sound familiar?" title="The problems we are called in to fix">
-        <p>If any of these describe a normal week, an outside view usually pays for itself quickly.</p>
-        <CheckList items={problems} />
-        <p>
+      {/* 7. Problems we solve, as they are told to us */}
+      <ConversationSection
+        id="problems-heading"
+        title="Does any of this sound like your week?"
+        intro="This is what we hear on first calls, in one form or another."
+        image="home-problems"
+        lines={problems}
+        reply="You’re not alone. An outside view usually pays for itself quickly."
+      >
+        <p data-reveal className="mt-10 text-fg-muted">
           Our guides on{" "}
           <Link href="/insights/reduce-patient-no-shows" className="text-link">
             reducing patient no-shows
@@ -330,57 +379,49 @@ export default async function HomePage() {
           </Link>{" "}
           show where to start.
         </p>
-      </SplitSection>
+      </ConversationSection>
 
-      {/* 8. Engagement steps */}
-      <section className="bg-deep py-20 md:py-28">
+      {/* 8. Engagement steps, and the numbers behind them */}
+      <section className="py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading kicker="How it works" title="How an engagement works" intro="A simple path from the first conversation to lasting change." />
-          <div className="mt-12">
+          <SectionHeading title="Working together, one step at a time" intro="A simple path from the first conversation to lasting change." />
+          <div className="mt-14">
             <Steps steps={engagementSteps} />
           </div>
-        </div>
-      </section>
-
-      {/* 9. Numbers */}
-      <PhotoBand image="home-stats">
-        <div className="page-container py-20 md:py-24">
-          <dl className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="mt-20 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {figures.map((stat, index) => (
-              <div key={stat.label} data-reveal style={delay(index * 110)} className="border-l border-gold/50 pl-6">
+              <div key={stat.label} data-reveal style={delay(index * 110)} className="shape-bubble bg-panel px-6 py-6">
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="font-serif text-[3.5rem] leading-none text-gold">
+                <dd className="font-serif text-[2.75rem] leading-none font-semibold text-accent">
                   <CountUp value={stat.value} suffix={stat.suffix} />
                 </dd>
-                <dd className="mt-3 text-fg-muted">{stat.label}</dd>
+                <dd className="mt-3 text-[0.975rem] text-fg-muted">{stat.label}</dd>
               </div>
             ))}
           </dl>
         </div>
-      </PhotoBand>
+      </section>
 
-      {/* 10. Focus areas carousel */}
-      <section className="overflow-hidden py-20 md:py-28">
+      {/* 9. Focus areas carousel */}
+      <section className="overflow-hidden bg-deep py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading kicker="Where we help" title="Focus areas across our practice" />
+          <SectionHeading title="Where we roll up our sleeves" />
           <div data-reveal className="mt-12">
             <Carousel label="Focus areas" slideClassName="basis-[80%] sm:basis-1/2 lg:basis-1/4">
               {focusAreas.map((item) => (
-                <ImageCard key={item.title} item={item} ratio="aspect-[3/4]" sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 80vw" />
+                <ImageCard key={item.title} item={item} ratio="aspect-[4/3]" sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 80vw" />
               ))}
             </Carousel>
           </div>
         </div>
       </section>
 
-      {/* 11. Packages */}
-      <section id="packages" className="relative isolate scroll-mt-24 overflow-hidden bg-deep py-20 md:py-28">
-        <div aria-hidden="true" className="glow left-1/2 top-10 -z-10 size-[30rem] -translate-x-1/2 bg-gold/15" />
+      {/* 10. Packages */}
+      <section id="packages" className="scroll-mt-24 py-20 md:py-28">
         <div className="page-container">
           <SectionHeading
             center
-            kicker="Packages and fees"
-            title="Clear packages, published prices"
+            title="Simple packages, with the prices up front"
             intro={
               <>
                 Not sure which fits?{" "}
@@ -397,33 +438,32 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 12. Why us */}
-      <SplitSection image="home-why" kicker="Why Anoka Advisors" title="A senior partner, not a slide deck">
-        <dl className="grid gap-6 sm:grid-cols-2">
+      {/* 11. Why us */}
+      <SplitSection image="home-why" reverse tone="deep" title="A senior partner, not a slide deck">
+        <dl className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
           {principles.map((principle) => (
-            <div key={principle.title} className="border-t border-line-strong pt-4">
-              <dt className="font-serif text-[1.375rem] text-fg">{principle.title}</dt>
-              <dd className="mt-1.5 text-[0.975rem]">{principle.body}</dd>
+            <div key={principle.title}>
+              <dt className="font-serif text-[1.375rem] font-medium text-fg">{principle.title}</dt>
+              <dd className="mt-1.5">{principle.body}</dd>
             </div>
           ))}
         </dl>
       </SplitSection>
 
-      {/* 13. Insights */}
-      <section aria-labelledby="insights-heading" className="bg-deep py-20 md:py-28">
+      {/* 12. Insights */}
+      <section aria-labelledby="insights-heading" className="py-20 md:py-28">
         <div className="page-container">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <SectionHeading
-              kicker="Insights"
-              title="Practical guides from our work"
+              title="Reading for busy operations leaders"
               intro="Plain-spoken advice on patient access, virtual care and pharmacy operations."
               id="insights-heading"
             />
-            <Link href="/insights" className="btn btn-ghost shrink-0">
+            <Link href="/insights" className="btn btn-ghost shrink-0 self-start md:self-auto">
               All insights
             </Link>
           </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
             {insights.slice(0, 3).map((insight, index) => (
               <InsightCard key={insight.slug} insight={insight} index={index} />
             ))}
@@ -431,10 +471,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 14. FAQ */}
-      <FaqSection image="home-faq" title="Common questions" faqs={generalFaqs} tone="night" />
+      {/* 13. FAQ */}
+      <FaqSection image="home-faq" title="Questions people often ask us" faqs={generalFaqs} />
 
-      {/* 15. Call to action */}
+      {/* 14. Call to action */}
       <CtaBand />
 
       <JsonLd

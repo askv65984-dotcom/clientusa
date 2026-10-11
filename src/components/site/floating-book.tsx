@@ -26,7 +26,7 @@ export function FloatingBook() {
       href="/book"
       aria-hidden={!shown}
       tabIndex={shown ? undefined : -1}
-      className={`btn btn-gold fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 h-14 gap-2.5 px-6 text-base shadow-[0_18px_45px_-12px_rgba(0,0,0,0.75)] transition-[opacity,translate] duration-500 md:right-8 md:bottom-8 ${
+      className={`btn btn-accent fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 h-14 gap-2.5 px-6 text-base shadow-[0_18px_40px_-16px_rgba(74,48,26,0.55)] transition-[opacity,translate] duration-500 md:right-8 md:bottom-8 ${
         shown ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
       }`}
     >

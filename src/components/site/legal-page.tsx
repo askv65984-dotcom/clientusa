@@ -50,26 +50,26 @@ export function LegalPage({
         <aside className="lg:col-span-4">
           <div className="lg:sticky lg:top-28">
             <nav aria-label="On this page" className="card p-6">
-              <h2 className="font-sans text-[0.9375rem] font-semibold tracking-normal text-gold">On this page</h2>
+              <h2 className="font-sans text-[0.9375rem] font-semibold tracking-normal text-accent">On this page</h2>
               <ol className="mt-4 space-y-2.5 text-[0.9375rem]">
                 {sections.map((section, index) => (
                   <li key={section.id} className="flex gap-3">
                     <span className="w-5 shrink-0 text-fg-soft">{index + 1}.</span>
-                    <a href={`#${section.id}`} className="text-fg-muted no-underline hover:text-gold">
+                    <a href={`#${section.id}`} className="text-fg-muted no-underline hover:text-accent">
                       {section.title}
                     </a>
                   </li>
                 ))}
               </ol>
             </nav>
-            <nav aria-label="Legal pages" className="mt-6 hidden rounded-[18px] border border-line p-6 lg:block">
+            <nav aria-label="Legal pages" className="mt-6 hidden rounded-[1.75rem] border border-line p-6 lg:block">
               <h2 className="font-sans text-[0.9375rem] font-semibold tracking-normal text-fg">Other policies</h2>
               <ul className="mt-3 space-y-2 text-[0.9375rem]">
                 {legalNav
                   .filter((link) => link.href !== path)
                   .map((link) => (
                     <li key={link.href}>
-                      <Link href={link.href} className="text-fg-muted no-underline hover:text-gold">
+                      <Link href={link.href} className="text-fg-muted no-underline hover:text-accent">
                         {link.label}
                       </Link>
                     </li>
@@ -84,13 +84,13 @@ export function LegalPage({
           {sections.map((section, index) => (
             <section key={section.id} aria-labelledby={section.id}>
               <h2 id={section.id} className="text-fg">
-                <span className="mr-3 text-gold">{index + 1}.</span>
+                <span className="mr-3 text-accent">{index + 1}.</span>
                 {section.title}
               </h2>
               {section.body}
             </section>
           ))}
-          <div className="mt-14 rounded-[18px] border border-line bg-panel/60 p-6">
+          <div className="shape-bubble mt-14 bg-panel p-6">
             <p className="!mb-0">
               Questions about this policy? Email{" "}
               <a href="mailto:info@anokaadvisors.com">info@anokaadvisors.com</a> or use our{" "}

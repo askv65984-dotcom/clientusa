@@ -3,21 +3,21 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 // Fonts and the logo never change between requests, so they are read once when the module loads.
-const serif = await readFile(join(process.cwd(), "src/assets/newsreader-500.woff"));
-const sans = await readFile(join(process.cwd(), "src/assets/public-sans-500.woff"));
+const serif = await readFile(join(process.cwd(), "src/assets/lora-600.woff"));
+const sans = await readFile(join(process.cwd(), "src/assets/atkinson-next-500.woff"));
 const logo = `data:image/png;base64,${(await readFile(join(process.cwd(), "src/assets/brand/anoka-advisors-logo.png"))).toString("base64")}`;
 
 export const alt = "Anoka Advisors: operations consulting for healthcare, telehealth and pharmacy";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// The site's dark palette.
-const c = { night: "#0a1310", panel: "#13211c", line: "#34503f", fg: "#ebf1ed", muted: "#a9b8b1", gold: "#d8b77e", mint: "#86bfae" };
+// The site's palette, with each practice area in its own color.
+const c = { night: "#0a0a0a", panel: "#24211e", line: "#3d3c39", fg: "#f6efe3", gold: "#e2bb7b", mint: "#93d0ba", slate: "#a9bfe0" };
 
 const bars = [
-  { from: 0, to: 2, color: c.mint, label: "Healthcare" },
-  { from: 1, to: 3, color: c.fg, label: "Telehealth" },
-  { from: 3, to: 5, color: c.gold, label: "Pharmacy" },
+  { from: 0, to: 2, color: c.gold, label: "Healthcare" },
+  { from: 1, to: 3, color: c.mint, label: "Telehealth" },
+  { from: 3, to: 5, color: c.slate, label: "Pharmacy" },
 ];
 
 export default async function OpengraphImage() {
@@ -35,7 +35,7 @@ export default async function OpengraphImage() {
           background: c.night,
           backgroundImage: `radial-gradient(circle at 85% 10%, ${c.panel} 0%, ${c.night} 55%)`,
           padding: `56px ${left}px`,
-          fontFamily: "Public Sans",
+          fontFamily: "Atkinson Hyperlegible Next",
           color: c.fg,
           position: "relative",
         }}
@@ -46,8 +46,8 @@ export default async function OpengraphImage() {
           style={{
             display: "flex",
             marginTop: 52,
-            fontFamily: "Newsreader",
-            fontSize: 70,
+            fontFamily: "Lora",
+            fontSize: 64,
             lineHeight: 1.06,
             letterSpacing: -1,
             maxWidth: 960,
@@ -93,8 +93,8 @@ export default async function OpengraphImage() {
     {
       ...size,
       fonts: [
-        { name: "Newsreader", data: serif, style: "normal", weight: 500 },
-        { name: "Public Sans", data: sans, style: "normal", weight: 500 },
+        { name: "Lora", data: serif, style: "normal", weight: 600 },
+        { name: "Atkinson Hyperlegible Next", data: sans, style: "normal", weight: 500 },
       ],
     },
   );

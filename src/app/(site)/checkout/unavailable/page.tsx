@@ -17,7 +17,7 @@ export default function CheckoutUnavailablePage() {
       title="Checkout could not be started"
       lede="The package may have changed since the page loaded, or our payment system did not respond. You have not been charged. Open the packages again, or contact us and we will help you finish."
     >
-      <Link href="/pricing#packages" className="btn btn-gold">
+      <Link href="/pricing#packages" className="btn btn-accent">
         See current packages
       </Link>
       <Link href="/contact" className="btn btn-ghost">

@@ -43,3 +43,7 @@ next-env.d.ts
 
 # local credentials
 *.local.txt
+
+# Local render workspace for the hero animation
+scripts/hero-video/node_modules/
+scripts/hero-video/mark.png

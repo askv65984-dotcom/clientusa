@@ -69,7 +69,7 @@ export function SchedulingEmbed({
       {link.kind === "link" ? (
         <div className="p-6 md:p-8">
           <p className="text-lede text-fg">Choose a time on our booking page.</p>
-          <a href={link.url} target="_blank" rel="noopener noreferrer" className="btn btn-gold mt-6">
+          <a href={link.url} target="_blank" rel="noopener noreferrer" className="btn btn-accent mt-6">
             Open the booking page
           </a>
         </div>

@@ -19,7 +19,7 @@ export const photos = manifest as Record<
 
 /**
  * A Pexels photo from public/images, filling its positioned parent.
- * Decorative uses pass alt="" so screen readers skip them.
+ * Decorative uses pass alt="" so screen readers skip them. The photo class warms it slightly on the public site.
  */
 export function Photo({
   name,
@@ -44,7 +44,7 @@ export function Photo({
       priority={priority}
       placeholder="blur"
       blurDataURL={photo.blurDataURL}
-      className={className}
+      className={`photo ${className}`}
     />
   );
 }

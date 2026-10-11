@@ -28,7 +28,7 @@ const getDetectedZone = () => (detectedZone ??= detectUsTimeZone());
 const getLocalZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const chip =
-  "cursor-pointer rounded-xl border border-line-strong bg-deep text-fg-muted transition-colors hover:border-gold/60 has-checked:border-gold has-checked:bg-gold/12 has-checked:text-fg has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-gold";
+  "cursor-pointer rounded-2xl border border-line-strong bg-deep text-fg-muted transition-colors hover:border-accent/60 has-checked:border-accent has-checked:bg-accent/12 has-checked:text-fg has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-accent";
 
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
@@ -97,7 +97,7 @@ export function BookingRequestForm({
   if (state.status === "success") {
     return (
       <div role="status" className="card p-6 md:p-8">
-        <span className="grid size-12 place-items-center rounded-full border border-gold/60 text-gold">
+        <span className="grid size-12 place-items-center rounded-full bg-accent text-on-accent">
           <svg viewBox="0 0 20 20" aria-hidden="true" className="size-6">
             <path d="M5.5 10.5l3 3 6-6.5" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -106,7 +106,7 @@ export function BookingRequestForm({
         <p className="mt-2 text-fg-muted">{state.message}</p>
         {state.summary ? (
           <>
-            <dl className="mt-6 grid gap-5 rounded-xl border border-line bg-deep p-5 sm:grid-cols-2">
+            <dl className="mt-6 grid gap-5 rounded-2xl bg-deep p-5 sm:grid-cols-2">
               <div>
                 <dt className="text-[0.875rem] text-fg-soft">Day</dt>
                 <dd className="mt-1 text-fg">{state.summary.day}</dd>
@@ -187,7 +187,7 @@ export function BookingRequestForm({
                   );
                 })
               : Array.from({ length: DAYS_OFFERED }, (_, index) => (
-                  <span key={index} aria-hidden="true" className="h-[5.25rem] rounded-xl border border-line bg-deep/60" />
+                  <span key={index} aria-hidden="true" className="h-[5.25rem] rounded-2xl border border-line bg-deep/60" />
                 ))}
           </div>
           <noscript>
@@ -381,7 +381,7 @@ export function BookingRequestForm({
         <p aria-live="polite" className="text-[0.975rem] text-fg-muted">
           {choice}
         </p>
-        <SubmitButton label="Request this time" pendingLabel="Sending…" className="btn btn-gold shrink-0" pending={pending} />
+        <SubmitButton label="Request this time" pendingLabel="Sending…" className="btn btn-accent shrink-0" pending={pending} />
       </div>
     </form>
   );

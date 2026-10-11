@@ -21,7 +21,7 @@ function Chevron({ open }: { open: boolean }) {
 }
 
 const linkClass =
-  "inline-flex h-10 items-center gap-1.5 rounded-full px-3.5 text-[0.975rem] font-medium text-fg/85 no-underline transition-colors hover:bg-white/[0.06] hover:text-fg aria-[current=page]:bg-white/[0.06] aria-[current=page]:text-gold xl:px-4";
+  "inline-flex h-10 items-center gap-1.5 rounded-full px-3.5 text-[0.975rem] font-medium text-fg/85 no-underline transition-colors hover:bg-white/[0.06] hover:text-fg aria-[current=page]:bg-white/[0.06] aria-[current=page]:text-accent xl:px-4";
 
 /** A menu item that opens a panel of links on click, hover or keyboard focus. */
 function NavMenu({
@@ -105,7 +105,7 @@ function NavMenu({
                   href={link.href}
                   onClick={() => setOpen(false)}
                   aria-current={pathname === link.href ? "page" : undefined}
-                  className="block rounded-2xl px-4 py-3 text-fg no-underline transition-colors hover:bg-white/[0.05] aria-[current=page]:bg-white/[0.05] aria-[current=page]:text-gold"
+                  className="block rounded-2xl px-4 py-3 text-fg no-underline transition-colors hover:bg-white/[0.05] aria-[current=page]:bg-white/[0.05] aria-[current=page]:text-accent"
                 >
                   <span className="block font-semibold">{link.label}</span>
                   {link.description ? <span className="mt-0.5 block text-[0.9375rem] leading-snug text-fg-muted">{link.description}</span> : null}
@@ -116,7 +116,7 @@ function NavMenu({
           <Link
             href={footer.href}
             onClick={() => setOpen(false)}
-            className="mt-1.5 flex items-center justify-between rounded-2xl bg-white/[0.05] px-4 py-3 font-semibold text-gold no-underline transition-colors hover:bg-white/[0.09]"
+            className="mt-1.5 flex items-center justify-between rounded-2xl bg-white/[0.05] px-4 py-3 font-semibold text-accent no-underline transition-colors hover:bg-white/[0.09]"
           >
             {footer.label}
             <svg viewBox="0 0 20 20" aria-hidden="true" className="size-4">
@@ -168,13 +168,13 @@ export function SiteHeader({ serviceLinks, insightLinks }: { serviceLinks: NavLi
   ];
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 md:pt-4">
-      <div aria-hidden="true" className="scroll-progress fixed inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gold" />
+    <header className="theme-dark fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 md:pt-4">
+      <div aria-hidden="true" className="scroll-progress fixed inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-accent" />
       <div
         className={`relative z-50 mx-auto flex h-16 max-w-[1240px] md:h-[4.5rem] items-center justify-between gap-3 rounded-full border pr-2 pl-4 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 sm:pl-5 ${
           scrolled || open
-            ? "border-line-strong bg-night/85 shadow-[0_18px_50px_-18px_rgba(0,0,0,0.85)]"
-            : "border-white/10 bg-night/55 shadow-[0_12px_40px_-20px_rgba(0,0,0,0.6)]"
+            ? "border-line-strong bg-base/95 shadow-[0_18px_50px_-22px_rgba(40,25,10,0.6)]"
+            : "border-white/10 bg-base/85 shadow-[0_12px_40px_-22px_rgba(40,25,10,0.5)]"
         }`}
       >
         <Link href="/" className="inline-flex shrink-0 items-center no-underline">
@@ -220,7 +220,7 @@ export function SiteHeader({ serviceLinks, insightLinks }: { serviceLinks: NavLi
           </ul>
         </nav>
 
-        <Link href="/book" className="btn btn-gold hidden h-12 min-h-0 shrink-0 px-6 lg:inline-flex">
+        <Link href="/book" className="btn btn-accent hidden h-12 min-h-0 shrink-0 px-6 lg:inline-flex">
           Book a consultation
         </Link>
 
@@ -239,7 +239,7 @@ export function SiteHeader({ serviceLinks, insightLinks }: { serviceLinks: NavLi
         </button>
       </div>
 
-      <div id="mobile-menu" hidden={!open} className="fixed inset-0 z-40 overflow-y-auto bg-night/97 pt-24 backdrop-blur-xl lg:hidden">
+      <div id="mobile-menu" hidden={!open} className="fixed inset-0 z-40 overflow-y-auto bg-base/97 pt-24 backdrop-blur-xl lg:hidden">
         <nav aria-label="Main" className="page-container flex min-h-full flex-col pb-8">
           <ul>
             {mobileLinks.map((item, index) => (
@@ -248,7 +248,7 @@ export function SiteHeader({ serviceLinks, insightLinks }: { serviceLinks: NavLi
                   href={item.href}
                   onClick={() => setOpen(false)}
                   aria-current={isActive(pathname, item.href) ? "page" : undefined}
-                  className="block py-4 font-serif text-[2rem] text-fg no-underline aria-[current=page]:text-gold"
+                  className="block py-4 font-serif text-[2rem] text-fg no-underline aria-[current=page]:text-accent"
                 >
                   {item.label}
                 </Link>
@@ -260,7 +260,7 @@ export function SiteHeader({ serviceLinks, insightLinks }: { serviceLinks: NavLi
                           href={child.href}
                           onClick={() => setOpen(false)}
                           aria-current={pathname === child.href ? "page" : undefined}
-                          className="block py-1.5 pl-4 text-lede text-fg-muted no-underline aria-[current=page]:text-gold"
+                          className="block py-1.5 pl-4 text-lede text-fg-muted no-underline aria-[current=page]:text-accent"
                         >
                           {child.label}
                         </Link>
@@ -272,7 +272,7 @@ export function SiteHeader({ serviceLinks, insightLinks }: { serviceLinks: NavLi
             ))}
           </ul>
           <div className="mt-auto pt-10">
-            <Link href="/book" onClick={() => setOpen(false)} className="btn btn-gold w-full">
+            <Link href="/book" onClick={() => setOpen(false)} className="btn btn-accent w-full">
               Book a consultation
             </Link>
             <a href="mailto:info@anokaadvisors.com" className="mt-5 block text-center text-fg-muted">

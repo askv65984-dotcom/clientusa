@@ -15,8 +15,8 @@ export function ArticleFigure({ image, caption, alt }: { image: PhotoKey; captio
 /** Highlighted note inside an article. */
 export function Callout({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <aside className="!mt-8 rounded-[18px] border border-gold/40 bg-gold/5 p-6">
-      <p className="font-semibold text-gold">{title}</p>
+    <aside className="!mt-8 rounded-[18px] border border-accent/40 bg-accent/5 p-6">
+      <p className="font-semibold text-accent">{title}</p>
       <div className="mt-2 text-fg">{children}</div>
     </aside>
   );

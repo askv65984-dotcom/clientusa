@@ -5,7 +5,7 @@ import { useFormStatus } from "react-dom";
 export function SubmitButton({
   label,
   pendingLabel,
-  className = "btn btn-gold",
+  className = "btn btn-accent",
   pending: pendingOverride,
 }: {
   label: string;

@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { packagePhoto } from "@/components/site/fee-schedule";
 import { JsonLd } from "@/components/site/json-ld";
 import { Photo, type PhotoKey } from "@/components/site/photo";
-import { CheckIcon, CheckList, FaqSection, FeatureCards, PageHero, SectionHeading, SplitSection } from "@/components/site/sections";
+import { CheckBadge, CheckList, FaqSection, FeatureCards, PageHero, SectionHeading, SplitSection } from "@/components/site/sections";
 import { getActivePackages, getConsultationPackage } from "@/lib/data";
 import { formatUsd, priceDisplay } from "@/lib/format";
 import { faqJsonLd, organizationId, pageMetadata, webPageJsonLd } from "@/lib/seo";
@@ -48,29 +48,28 @@ function OptionCard({
   index: number;
 }) {
   return (
-    <article data-reveal style={delay(index * 110)} className="card group flex flex-col overflow-hidden">
-      <div className="relative aspect-[16/9] overflow-hidden">
+    <article data-reveal style={delay(index * 110)} className="card group flex flex-col p-2.5">
+      <div className="relative aspect-[16/9] overflow-hidden rounded-[1.3rem]">
         <Photo
           name={image}
           alt=""
           sizes="(min-width: 1024px) 45vw, 100vw"
-          className="object-cover transition-transform duration-[1200ms] group-hover:scale-105"
+          className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-panel via-panel/30 to-transparent" />
       </div>
-      <div className="flex flex-1 flex-col p-6 pt-2 md:p-8 md:pt-3">
-        <p className="text-[0.9375rem] font-semibold text-gold">{label}</p>
-        <h3 className="mt-1 text-[2rem] leading-[1.1] text-fg">{title}</h3>
+      <div className="flex flex-1 flex-col px-4 pt-6 pb-4 md:px-6 md:pb-6">
+        <p className="font-bold text-accent">{label}</p>
+        <h3 className="mt-1.5 text-[2rem] leading-[1.1] text-fg">{title}</h3>
         <p className="mt-3 text-fg-muted">{body}</p>
         <ul className="mt-6 flex-1 space-y-3">
           {points.map((point) => (
             <li key={point} className="flex gap-3 text-[0.975rem] text-fg">
-              <CheckIcon />
+              <CheckBadge />
               <span>{point}</span>
             </li>
           ))}
         </ul>
-        <Link href={href} className="btn btn-gold mt-8 w-full">
+        <Link href={href} className="btn btn-accent mt-8 w-full">
           {cta}
         </Link>
       </div>
@@ -125,7 +124,7 @@ export default async function BookPage() {
             : "Request an initial consultation by video. Tell us what is going on and when suits you."
         }
       >
-        <a href="#initial" className="btn btn-gold">
+        <a href="#initial" className="btn btn-accent">
           Request an initial consultation
         </a>
         {paid ? (
@@ -138,7 +137,7 @@ export default async function BookPage() {
       {/* 2 */}
       <section id="options" aria-labelledby="options-heading" className="scroll-mt-24 py-20 md:py-24">
         <div className="page-container">
-          <SectionHeading center kicker="Two ways to start" title="Choose the option that fits" id="options-heading" />
+          <SectionHeading center title="Choose the option that fits" id="options-heading" />
           <div className={`mx-auto mt-12 grid gap-6 ${paid ? "lg:grid-cols-2" : "max-w-2xl"}`}>
             <OptionCard
               index={0}
@@ -170,18 +169,18 @@ export default async function BookPage() {
       <section id="initial" aria-labelledby="initial-heading" className="scroll-mt-24 bg-deep py-20 md:py-24">
         <div className="page-container grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <SectionHeading kicker="Initial consultation" title="Request a time that suits you" id="initial-heading" />
-            <div data-reveal className="relative mt-8 aspect-[4/3] overflow-hidden rounded-[20px]">
+            <SectionHeading title="Request a time that suits you" id="initial-heading" />
+            <div data-reveal className="shape-bubble relative mt-8 aspect-[4/3] overflow-hidden bg-panel">
               <Photo name="bk-video" alt="" sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover" />
             </div>
             <ol className="mt-8 space-y-5">
               {initialSteps.map((item, index) => (
                 <li key={item.title} data-reveal style={delay(index * 100)} className="flex gap-4">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-full border border-gold/60 font-serif text-lg text-gold">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-accent font-serif text-lg font-semibold text-on-accent">
                     {index + 1}
                   </span>
                   <div>
-                    <h3 className="font-sans text-base font-semibold tracking-normal text-fg">{item.title}</h3>
+                    <h3 className="font-sans text-base font-bold tracking-normal text-fg">{item.title}</h3>
                     <p className="mt-1 text-[0.975rem] text-fg-muted">{item.body}</p>
                   </div>
                 </li>
@@ -197,7 +196,7 @@ export default async function BookPage() {
       {/* 4 */}
       <section className="py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading kicker="How it works" title="Video meetings, and secure payment for paid sessions" />
+          <SectionHeading title="Video meetings, and secure payment for paid sessions" />
           <div className="mt-12">
             <FeatureCards
               columns={2}
@@ -214,32 +213,48 @@ export default async function BookPage() {
         </div>
       </section>
 
-      {/* 5 */}
-      <SplitSection image="bk-prepare" tone="deep" kicker="Prepare" title="How to get the most from your meeting">
-        <CheckList
-          items={[
-            "Jot down the one or two problems that matter most right now",
-            "Note any numbers you track, such as wait times or volume",
-            "Think about what a good outcome would look like in six months",
-            "Leave out any patient information",
-          ]}
-        />
-      </SplitSection>
-
-      {/* 6 */}
-      <SplitSection image="bk-cover" reverse kicker="In the meeting" title="What we will cover">
-        <CheckList
-          items={[
-            "What is happening today and how long it has been going on",
-            "What you have already tried",
-            "Where the problem shows up for patients and staff",
-            "What to do next, and whether further work would help",
-          ]}
-        />
-      </SplitSection>
+      {/* 5 and 6: before the meeting, and during it */}
+      <section className="bg-walnut py-20 md:py-28">
+        <div className="page-container grid gap-5 md:grid-cols-2">
+          {[
+            {
+              image: "bk-prepare" as const,
+              title: "How to get the most from your meeting",
+              items: [
+                "Jot down the one or two problems that matter most right now",
+                "Note any numbers you track, such as wait times or volume",
+                "Think about what a good outcome would look like in six months",
+                "Leave out any patient information",
+              ],
+            },
+            {
+              image: "bk-cover" as const,
+              title: "What we will cover",
+              items: [
+                "What is happening today and how long it has been going on",
+                "What you have already tried",
+                "Where the problem shows up for patients and staff",
+                "What to do next, and whether further work would help",
+              ],
+            },
+          ].map((panel, index) => (
+            <article key={panel.title} data-reveal style={delay(index * 110)} className="card p-2.5">
+              <div className="relative aspect-[16/9] overflow-hidden rounded-[1.3rem]">
+                <Photo name={panel.image} alt="" sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />
+              </div>
+              <div className="px-4 pt-7 pb-5 md:px-6 md:pb-7">
+                <h2 className="text-[1.875rem] leading-tight text-fg">{panel.title}</h2>
+                <div className="mt-6">
+                  <CheckList items={panel.items} />
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
 
       {/* 7 */}
-      <SplitSection image="bk-after" tone="deep" kicker="Afterwards" title="What happens next">
+      <SplitSection image="bk-after" title="What happens next">
         <p>
           After an initial consultation, we follow up by email with the next step we recommend. If a larger piece of work
           makes sense, we explain which package fits and what it includes. You can buy it online when you are ready, or ask
@@ -249,7 +264,7 @@ export default async function BookPage() {
       </SplitSection>
 
       {/* 8 */}
-      <SplitSection image="bk-who" reverse kicker="Who should book" title="A consultation is a good fit for">
+      <SplitSection image="bk-who" reverse tone="deep" title="A consultation is a good fit for">
         <CheckList
           items={[
             "Practice owners and administrators",
@@ -262,10 +277,10 @@ export default async function BookPage() {
       </SplitSection>
 
       {/* 9 */}
-      <FaqSection image="bk-faq" title="Booking questions" faqs={bookingFaqs} tone="night" />
+      <FaqSection image="bk-faq" title="Booking questions" faqs={bookingFaqs} tone="base" />
 
       {/* 10 */}
-      <SplitSection image="bk-contact" tone="deep" kicker="Questions first?" title="Send a message instead">
+      <SplitSection image="bk-contact" tone="deep" title="Send a message instead">
         <p>
           If you would like to check something before booking, or you need to pay by invoice, send us a message. You can
           also browse our{" "}

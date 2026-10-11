@@ -75,7 +75,7 @@ export default function ServicesPage() {
         title="Consulting services"
         lede="Three connected practice areas. Many problems start in one and reach into another, so we look at the whole path a patient or prescription takes."
       >
-        <Link href="/book" className="btn btn-gold">
+        <Link href="/book" className="btn btn-accent">
           Book a consultation
         </Link>
         <Link href="/pricing" className="btn btn-ghost">
@@ -84,7 +84,7 @@ export default function ServicesPage() {
       </PageHero>
 
       {/* 2 */}
-      <SplitSection image="services-intro" kicker="Our approach" title="Consulting that follows the patient's path">
+      <SplitSection image="services-intro" title="Consulting that follows the patient's path">
         <p>
           Healthcare delivery, virtual care and pharmacy are usually managed as separate departments. Patients do not
           experience them that way, and the problems we see rarely respect those boundaries.
@@ -101,23 +101,23 @@ export default function ServicesPage() {
           key={service.slug}
           image={service.images.row}
           reverse={index % 2 === 0}
-          tone={index % 2 === 0 ? "deep" : "night"}
-          kicker={`Practice area ${index + 1} of ${services.length}`}
+          tone={index % 2 === 0 ? "deep" : "base"}
+          tag={service.name}
           title={service.heading}
         >
           <p className="text-lede text-fg">{service.summary}</p>
           <CheckList items={service.focusAreas.map((area) => area.title)} columns={2} />
-          <Link href={`/services/${service.slug}`} className="btn btn-gold mt-2">
+          <Link href={`/services/${service.slug}`} className="btn btn-accent mt-2">
             Explore {service.name.toLowerCase()}
           </Link>
         </SplitSection>
       ))}
 
       {/* 6 */}
-      <Marquee items={services.flatMap((service) => service.focusAreas.map((area) => area.title))} />
+      <Marquee tone="base" items={services.flatMap((service) => service.focusAreas.map((area) => area.title))} />
 
       {/* 7 */}
-      <SplitSection image="services-capabilities" kicker="Across every engagement" title="Capabilities that cut across all three areas">
+      <SplitSection image="services-capabilities" title="Capabilities that cut across all three areas">
         <p>Whatever the practice area, these are the working tools we bring to the table.</p>
         <CheckList items={capabilities} columns={2} />
       </SplitSection>
@@ -125,7 +125,7 @@ export default function ServicesPage() {
       {/* 8 */}
       <section className="overflow-hidden bg-deep py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading kicker="Who we serve" title="Organizations we work with" />
+          <SectionHeading title="Organizations we work with" />
           <div data-reveal className="mt-12">
             <Carousel label="Organizations we work with">
               {audiences.map((item) => (
@@ -139,7 +139,6 @@ export default function ServicesPage() {
       {/* 9 */}
       <section className="page-container py-20 md:py-28">
         <SectionHeading
-          kicker="Ways to work together"
           title="Choose the engagement that fits"
           intro="Every engagement has a fixed fee and a written list of what is included."
         />
@@ -149,13 +148,15 @@ export default function ServicesPage() {
       </section>
 
       {/* 10 */}
-      <SplitSection image="services-process" reverse tone="deep" kicker="From first call to lasting change" title="How an engagement runs">
+      <SplitSection image="services-process" reverse tone="deep" title="How an engagement runs">
         <ol className="space-y-5">
           {engagementSteps.map((step, index) => (
             <li key={step.title} className="flex gap-5">
-              <span className="font-serif text-[2.25rem] leading-none text-gold">{index + 1}</span>
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-accent font-serif text-xl font-semibold text-on-accent">
+                {index + 1}
+              </span>
               <div>
-                <h3 className="font-sans text-lg font-semibold tracking-normal text-fg">{step.title}</h3>
+                <h3 className="font-sans text-lg font-bold tracking-normal text-fg">{step.title}</h3>
                 <p className="mt-1">{step.body}</p>
               </div>
             </li>
@@ -164,7 +165,7 @@ export default function ServicesPage() {
       </SplitSection>
 
       {/* 11 */}
-      <SplitSection image="services-deliverables" kicker="What you receive" title="Working documents, not shelfware">
+      <SplitSection image="services-deliverables" title="Working documents, not shelfware">
         <p>Deliverables depend on the package you choose. These are the documents clients use most.</p>
         <CheckList items={deliverables} />
       </SplitSection>
@@ -172,7 +173,7 @@ export default function ServicesPage() {
       {/* 12 */}
       <section aria-labelledby="guides-heading" className="bg-deep py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading kicker="Guides" title="Learn before you call" id="guides-heading" intro="Practical articles on the problems each practice area solves." />
+          <SectionHeading title="Learn before you call" id="guides-heading" intro="Practical articles on the problems each practice area solves." />
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {insights.slice(0, 3).map((insight, index) => (
               <InsightCard key={insight.slug} insight={insight} index={index} />
@@ -185,7 +186,7 @@ export default function ServicesPage() {
       </section>
 
       {/* 13 */}
-      <FaqSection image="faq-default" title="Questions about our services" faqs={faqs} tone="night" />
+      <FaqSection image="faq-default" title="Questions about our services" faqs={faqs} tone="base" />
 
       {/* 14 */}
       <CtaBand />

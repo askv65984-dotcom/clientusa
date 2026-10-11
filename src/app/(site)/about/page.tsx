@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
+import { Photo } from "@/components/site/photo";
 import {
   CheckList,
   CtaBand,
@@ -49,7 +50,7 @@ export default function AboutPage() {
         title="About Anoka Advisors"
         lede="An independent consulting firm focused on the operational side of care: how patients get scheduled and seen, how prescriptions move from order to pickup, and how virtual care fits with everything else."
       >
-        <Link href="/book" className="btn btn-gold">
+        <Link href="/book" className="btn btn-accent">
           Book a consultation
         </Link>
         <Link href="/services" className="btn btn-ghost">
@@ -58,7 +59,7 @@ export default function AboutPage() {
       </PageHero>
 
       {/* 2 */}
-      <SplitSection image="ab-who" kicker="Who we are" title="A focused firm for the business of care">
+      <SplitSection image="ab-who" title="A focused firm for the business of care">
         <p>
           Anoka Advisors works with medical practices, telehealth programs, health systems and pharmacies across the
           United States. Our work sits where clinical care meets daily operations: scheduling, staffing, workflow,
@@ -68,7 +69,7 @@ export default function AboutPage() {
       </SplitSection>
 
       {/* 3 */}
-      <SplitSection image="ab-why" reverse tone="deep" kicker="Why operations" title="Why we focus on operations">
+      <SplitSection image="ab-why" reverse tone="deep" title="Why we focus on operations">
         <p>
           Most healthcare organizations do not struggle for lack of strategy. They struggle because the daily work is
           harder than it needs to be: handoffs that drop, schedules that do not match capacity, and processes that grew
@@ -81,24 +82,36 @@ export default function AboutPage() {
       </SplitSection>
 
       {/* 4 */}
-      <SplitSection image="ab-mission" kicker="Our mission" title="Make good care easier to deliver">
-        <p className="text-lede text-fg">
-          We help the people who run healthcare spend less time on workarounds and more time on patients.
-        </p>
-        <CheckList items={["Simpler workflows for staff", "Clearer experiences for patients", "Better information for leaders"]} />
-        <p>
-          We share what we learn in our{" "}
-          <Link href="/insights" className="text-link">
-            insights and guides
-          </Link>
-          , written for anyone running healthcare operations.
-        </p>
-      </SplitSection>
+      <section aria-labelledby="mission-heading" className="py-20 md:py-28">
+        <div className="page-container">
+          <div data-reveal className="max-w-[60rem]">
+            <h2 id="mission-heading" className="text-lg font-bold text-accent font-sans tracking-normal">
+              Make good care easier to deliver
+            </h2>
+            <p className="mt-5 font-serif text-[clamp(1.9rem,1.3rem+2.3vw,3.25rem)] leading-[1.15] font-medium text-fg">
+              We help the people who run healthcare spend less time on workarounds and more time on patients.
+            </p>
+          </div>
+          <div data-reveal className="mt-10 grid gap-x-10 gap-y-6 md:grid-cols-[1fr_auto] md:items-end">
+            <CheckList items={["Simpler workflows for staff", "Clearer experiences for patients", "Better information for leaders"]} columns={2} />
+            <p className="max-w-[24rem] text-fg-muted">
+              We share what we learn in our{" "}
+              <Link href="/insights" className="text-link">
+                insights and guides
+              </Link>
+              , written for anyone running healthcare operations.
+            </p>
+          </div>
+          <div data-reveal="zoom" className="shape-bubble relative mt-14 aspect-[16/9] overflow-hidden bg-panel md:aspect-[21/8]">
+            <Photo name="ab-mission" alt="" sizes="(min-width: 1280px) 74rem, 100vw" className="parallax object-cover" />
+          </div>
+        </div>
+      </section>
 
       {/* 5 */}
       <section className="bg-deep py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading kicker="How we work" title="Four principles behind every engagement" />
+          <SectionHeading title="Four principles behind every engagement" />
           <div className="mt-12">
             <FeatureCards items={principles} columns={4} />
           </div>
@@ -106,11 +119,11 @@ export default function AboutPage() {
       </section>
 
       {/* 6 */}
-      <Marquee items={["Practical", "Plain-spoken", "Independent", "Confidential", "Senior-led", "Nationwide"]} />
+      <Marquee tone="walnut" items={["Practical", "Plain-spoken", "Independent", "Confidential", "Senior-led", "Nationwide"]} />
 
       {/* 7 */}
       <section className="page-container py-20 md:py-28">
-        <SectionHeading kicker="What we focus on" title="Three connected practice areas" />
+        <SectionHeading title="Three connected practice areas" />
         <div className="mt-12">
           <ImageCardGrid
             items={services.map((service) => ({
@@ -124,7 +137,7 @@ export default function AboutPage() {
       </section>
 
       {/* 8 */}
-      <SplitSection image="ab-clients" reverse tone="deep" kicker="Our clients" title="Who we work with">
+      <SplitSection image="ab-clients" reverse tone="deep" title="Who we work with">
         <CheckList
           items={[
             "Independent and multi-site medical practices",
@@ -137,7 +150,7 @@ export default function AboutPage() {
       </SplitSection>
 
       {/* 9 */}
-      <SplitSection image="ab-collab" kicker="Working together" title="We work alongside your team">
+      <SplitSection image="ab-collab" title="We work alongside your team">
         <p>
           The people who do the work every day know where it breaks. We bring structure, outside perspective and
           experience from other organizations, and your team brings the detail.
@@ -146,7 +159,7 @@ export default function AboutPage() {
       </SplitSection>
 
       {/* 10 */}
-      <SplitSection image="ab-commit" reverse tone="deep" kicker="Our commitments" title="What you can count on">
+      <SplitSection image="ab-commit" reverse tone="deep" title="What you can count on">
         <CheckList
           items={[
             "Everything you share is treated as confidential",
@@ -161,8 +174,7 @@ export default function AboutPage() {
       <PhotoBand image="ab-nationwide">
         <div className="page-container py-20 md:py-28">
           <div data-reveal className="max-w-3xl">
-            <p className="kicker">Nationwide</p>
-            <h2 className="mt-4 text-section text-fg">Serving organizations across the United States</h2>
+            <h2 className="text-section text-fg">Serving organizations across the United States</h2>
             <p className="mt-5 text-lede text-fg-muted">
               Most of our work happens by video, so location is rarely a barrier. When a project calls for it,
               we visit on site.

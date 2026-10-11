@@ -46,7 +46,7 @@ export default function CreditsPage() {
         <ul className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
           {photographers.map(([name, info]) => (
             <li key={name} className="flex items-baseline justify-between gap-4 border-b border-line py-3">
-              <a href={info.url} target="_blank" rel="noopener noreferrer" className="text-fg no-underline hover:text-gold">
+              <a href={info.url} target="_blank" rel="noopener noreferrer" className="text-fg no-underline hover:text-accent">
                 {name}
               </a>
               <span className="text-sm text-fg-soft">
@@ -61,7 +61,7 @@ export default function CreditsPage() {
           <ul className="mt-5 space-y-2 text-[0.9375rem]">
             {all.map((photo) => (
               <li key={photo.src} className="text-fg-muted">
-                <a href={photo.pexelsUrl} target="_blank" rel="noopener noreferrer" className="text-fg-muted hover:text-gold">
+                <a href={photo.pexelsUrl} target="_blank" rel="noopener noreferrer" className="text-fg-muted hover:text-accent">
                   {photo.alt}
                 </a>{" "}
                 by {photo.photographer}

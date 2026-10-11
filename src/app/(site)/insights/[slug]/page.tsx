@@ -7,7 +7,7 @@ import { InsightCard } from "@/components/site/insight-card";
 import { JsonLd } from "@/components/site/json-ld";
 import { BrandMark } from "@/components/site/logo";
 import { Photo } from "@/components/site/photo";
-import { CheckList, CtaBand, SectionHeading } from "@/components/site/sections";
+import { CheckList, CtaBand, SectionHeading, Tag, practiceTone } from "@/components/site/sections";
 import { formatInsightDate, getInsight, insights, relatedInsights } from "@/content/insights";
 import { getService } from "@/content/services";
 import { faqJsonLd, organizationId, pageMetadata, webPageJsonLd } from "@/lib/seo";
@@ -70,12 +70,7 @@ export default async function InsightPage({ params }: PageProps<"/insights/[slug
 
   return (
     <>
-      <header className="relative isolate overflow-hidden pt-36 pb-14 md:pb-20">
-        <div className="absolute inset-0 -z-10">
-          <Photo name={insight.image} alt="" priority sizes="100vw" className="kenburns object-cover" />
-          <div className="absolute inset-0 bg-night/75" />
-          <div className="absolute inset-0 bg-linear-to-t from-night via-night/60 to-night/30" />
-        </div>
+      <header className="pt-32 md:pt-40">
         <div className="page-container">
           <div className="rise">
             <Breadcrumbs
@@ -86,13 +81,13 @@ export default async function InsightPage({ params }: PageProps<"/insights/[slug
               ]}
             />
           </div>
-          <p className="kicker rise mt-8">{insight.category}</p>
-          <h1 className="rise mt-4 max-w-[24ch] text-[clamp(2.25rem,1.5rem+3vw,4rem)] leading-[1.06] text-fg">{insight.title}</h1>
+          <Tag label={insight.category} className="rise mt-9" />
+          <h1 className="rise mt-4 max-w-[24ch] text-[clamp(2.25rem,1.5rem+3vw,4rem)] leading-[1.06] font-semibold text-fg">{insight.title}</h1>
           <p className="rise mt-6 max-w-[44rem] text-lede text-fg-muted">{insight.description}</p>
           <p className="rise mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[0.9375rem] text-fg-soft">
             <span>
               By{" "}
-              <Link href="/about" className="text-fg underline decoration-fg/30 hover:decoration-gold">
+              <Link href="/about" className="text-fg underline decoration-fg/30 hover:decoration-accent">
                 Anoka Advisors
               </Link>
             </span>
@@ -101,6 +96,9 @@ export default async function InsightPage({ params }: PageProps<"/insights/[slug
             </span>
             <span>{insight.readMinutes} min read</span>
           </p>
+          <div className="hero-frame soft-shadow shape-bubble relative mt-12 aspect-[16/9] overflow-hidden bg-panel md:aspect-[21/9]">
+            <Photo name={insight.image} alt="" priority sizes="(min-width: 1280px) 74rem, 100vw" className="hero-media object-cover" />
+          </div>
         </div>
       </header>
 
@@ -144,12 +142,12 @@ export default async function InsightPage({ params }: PageProps<"/insights/[slug
         <aside className="lg:col-span-4">
           <div className="space-y-6 lg:sticky lg:top-28">
             <nav aria-label="In this article" className="card p-6">
-              <h2 className="font-sans text-[0.9375rem] font-semibold tracking-normal text-gold">In this article</h2>
+              <h2 className="font-sans text-[0.9375rem] font-semibold tracking-normal text-accent">In this article</h2>
               <ol className="mt-4 space-y-2.5 text-[0.9375rem]">
                 {insight.toc.map((item, index) => (
                   <li key={item.id} className="flex gap-3">
                     <span className="w-5 shrink-0 text-fg-soft">{index + 1}.</span>
-                    <a href={`#${item.id}`} className="text-fg-muted no-underline hover:text-gold">
+                    <a href={`#${item.id}`} className="text-fg-muted no-underline hover:text-accent">
                       {item.title}
                     </a>
                   </li>
@@ -158,14 +156,14 @@ export default async function InsightPage({ params }: PageProps<"/insights/[slug
             </nav>
 
             {service ? (
-              <div className="card group relative overflow-hidden">
-                <div className="relative aspect-[16/9] overflow-hidden">
-                  <Photo name={service.images.card} alt="" sizes="(min-width: 1024px) 28vw, 100vw" className="object-cover transition-transform duration-[1200ms] group-hover:scale-110" />
+              <div className={`card group relative p-2.5 ${practiceTone(service.name)}`}>
+                <div className="relative aspect-[16/9] overflow-hidden rounded-[1.3rem]">
+                  <Photo name={service.images.card} alt="" sizes="(min-width: 1024px) 28vw, 100vw" className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" />
                 </div>
-                <div className="p-6">
-                  <p className="text-sm font-semibold text-gold">Related service</p>
+                <div className="px-4 pt-5 pb-4">
+                  <p className="tag">Related service</p>
                   <h2 className="mt-2 text-[1.375rem] text-fg">
-                    <Link href={`/services/${service.slug}`} className="text-fg no-underline after:absolute after:inset-0 hover:text-gold-strong">
+                    <Link href={`/services/${service.slug}`} className="text-fg no-underline after:absolute after:inset-0 hover:text-accent-strong">
                       {service.heading}
                     </Link>
                   </h2>
@@ -177,7 +175,7 @@ export default async function InsightPage({ params }: PageProps<"/insights/[slug
             <div className="card p-6">
               <h2 className="text-[1.375rem] text-fg">Talk it through</h2>
               <p className="mt-2 text-[0.9375rem] text-fg-muted">A one-to-one video meeting to talk through your situation and agree next steps.</p>
-              <Link href="/book" className="btn btn-gold mt-5 w-full">
+              <Link href="/book" className="btn btn-accent mt-5 w-full">
                 Book a consultation
               </Link>
             </div>
@@ -187,8 +185,8 @@ export default async function InsightPage({ params }: PageProps<"/insights/[slug
 
       <section aria-labelledby="related-heading" className="bg-deep py-20 md:py-24">
         <div className="page-container">
-          <SectionHeading kicker="Keep reading" title="Related insights" id="related-heading" />
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <SectionHeading title="Related insights" id="related-heading" />
+          <div className="mt-10 grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
             {related.map((item, index) => (
               <InsightCard key={item.slug} insight={item} index={index} />
             ))}

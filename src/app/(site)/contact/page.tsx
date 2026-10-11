@@ -56,7 +56,7 @@ export default async function ContactPage() {
         title="Contact Anoka Advisors"
         lede="Tell us a little about your organization and what you would like to change. We read every message and reply by email."
       >
-        <a href="#send-message" className="btn btn-gold">
+        <a href="#send-message" className="btn btn-accent">
           Send a message
         </a>
         <a href={`mailto:${email}`} className="btn btn-ghost">
@@ -74,7 +74,7 @@ export default async function ContactPage() {
             <ContactForm />
           </div>
           <aside className="space-y-6 lg:col-span-5">
-            <div data-reveal className="relative aspect-[4/3] overflow-hidden rounded-[20px]">
+            <div data-reveal className="shape-bubble-r relative aspect-[4/3] overflow-hidden bg-panel">
               <Photo name="ct-aside" alt="" sizes="(min-width: 1024px) 38vw, 100vw" className="object-cover" />
             </div>
             <div data-reveal className="card p-6">
@@ -117,7 +117,7 @@ export default async function ContactPage() {
       {/* 3 */}
       <section className="bg-deep py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading kicker="Ways to reach us" title="Choose what works for you" />
+          <SectionHeading title="Choose what works for you" />
           <div className="mt-12">
             <FeatureCards
               items={[
@@ -137,7 +137,7 @@ export default async function ContactPage() {
       </section>
 
       {/* 4 */}
-      <SplitSection image="ct-response" kicker="What happens next" title="After you send a message">
+      <SplitSection image="ct-response" title="After you send a message">
         <ol className="space-y-5">
           {[
             "We read your message and look at the details you shared.",
@@ -145,7 +145,7 @@ export default async function ContactPage() {
             "If talking it through would help, we suggest an initial consultation by video.",
           ].map((step, index) => (
             <li key={step} className="flex gap-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-full border border-gold/60 font-serif text-lg text-gold">
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-accent font-serif text-lg font-semibold text-on-accent">
                 {index + 1}
               </span>
               <p className="pt-1.5">{step}</p>
@@ -155,7 +155,7 @@ export default async function ContactPage() {
       </SplitSection>
 
       {/* 5 */}
-      <SplitSection image="ct-nationwide" reverse tone="deep" kicker="Service area" title="Wherever you are in the United States">
+      <SplitSection image="ct-nationwide" reverse tone="deep" title="Wherever you are in the United States">
         <p>
           Our clients are spread across the country. Most work happens by video, and we travel when a project
           needs someone on site.
@@ -163,13 +163,13 @@ export default async function ContactPage() {
       </SplitSection>
 
       {/* 6 */}
-      <SplitSection image="ct-rfp" kicker="Proposals" title="Sending a request for proposal?">
+      <SplitSection image="ct-rfp" title="Sending a request for proposal?">
         <p>Email your RFP or scope document to {email}. Include your deadline and any forms you need completed.</p>
         <CheckList items={["Scope and objectives", "Timeline and decision date", "Budget range, if known", "Required forms or certifications"]} columns={2} />
       </SplitSection>
 
       {/* 7 */}
-      <SplitSection image="ct-privacy" reverse tone="deep" kicker="Privacy" title="Please keep patient information out of messages">
+      <SplitSection image="ct-privacy" reverse tone="walnut" title="Please keep patient information out of messages">
         <p>
           Our forms and email are not designed for protected health information. Describe the situation without names,
           dates of birth or record numbers. If an engagement needs patient data, we agree on safeguards first.
@@ -181,13 +181,13 @@ export default async function ContactPage() {
 
       {/* 8 */}
       <section className="page-container py-20 md:py-28">
-        <SectionHeading kicker="Why people get in touch" title="Common reasons for a first message" />
+        <SectionHeading title="Common reasons for a first message" />
         <div className="mt-12">
           <FeatureCards
             items={[
-              { image: "area-healthcare", title: "Fixing patient access", body: "Long waits, phone backlogs and schedules that do not match capacity.", href: "/services/healthcare-operations-consulting" },
-              { image: "area-telehealth", title: "Launching or fixing telehealth", body: "Platform choices, virtual visit workflows and growth into new states.", href: "/services/telehealth-consulting" },
-              { image: "area-pharmacy", title: "Steadying pharmacy operations", body: "Wait times, inventory, staffing and inspection readiness.", href: "/services/pharmacy-operations-consulting" },
+              { image: "area-healthcare", meta: "Healthcare operations", title: "Fixing patient access", body: "Long waits, phone backlogs and schedules that do not match capacity.", href: "/services/healthcare-operations-consulting" },
+              { image: "area-telehealth", meta: "Telehealth", title: "Launching or fixing telehealth", body: "Platform choices, virtual visit workflows and growth into new states.", href: "/services/telehealth-consulting" },
+              { image: "area-pharmacy", meta: "Pharmacy operations", title: "Steadying pharmacy operations", body: "Wait times, inventory, staffing and inspection readiness.", href: "/services/pharmacy-operations-consulting" },
             ]}
           />
         </div>

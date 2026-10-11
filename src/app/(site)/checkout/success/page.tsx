@@ -41,7 +41,7 @@ async function Confirmation({ searchParams }: { searchParams: PageProps<"/checko
           The confirmation link may be incomplete. If you were charged, your receipt from Stripe has the details, and you
           can contact us so we can match it to your order.
         </p>
-        <Link href="/contact" className="btn btn-gold mt-6">
+        <Link href="/contact" className="btn btn-accent mt-6">
           Contact us
         </Link>
       </div>
@@ -56,7 +56,7 @@ async function Confirmation({ searchParams }: { searchParams: PageProps<"/checko
   return (
     <div className="grid gap-12 lg:grid-cols-12">
       <div className="lg:col-span-4">
-        <p className="inline-flex items-center gap-2 rounded-full border border-gold/50 bg-gold/10 px-4 py-1.5 font-semibold text-gold">
+        <p className="inline-flex items-center gap-2 rounded-full border border-accent/50 bg-accent/10 px-4 py-1.5 font-semibold text-accent">
           <svg viewBox="0 0 20 20" aria-hidden="true" className="size-5">
             <circle cx="10" cy="10" r="8.5" stroke="currentColor" strokeWidth="1.5" fill="none" />
             <path d="M6 10.5l2.75 2.75L14 8" stroke="currentColor" strokeWidth="1.75" fill="none" />

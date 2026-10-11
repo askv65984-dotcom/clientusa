@@ -36,7 +36,7 @@ export function ContactForm() {
 
   if (state.status === "success") {
     return (
-      <div role="status" className="rounded-2xl border border-gold/40 bg-gold/10 p-7">
+      <div role="status" className="rounded-2xl border border-accent/40 bg-accent/10 p-7">
         <h2 className="text-[1.75rem] text-fg">Message sent</h2>
         <p className="mt-2">{state.message}</p>
       </div>
@@ -165,7 +165,7 @@ export function ContactForm() {
         <input id="website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <SubmitButton label="Send message" pendingLabel="Sending…" className="btn btn-gold min-w-44" pending={pending} />
+      <SubmitButton label="Send message" pendingLabel="Sending…" className="btn btn-accent min-w-44" pending={pending} />
     </form>
   );
 }

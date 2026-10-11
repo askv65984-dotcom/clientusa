@@ -1,19 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Newsreader, Public_Sans } from "next/font/google";
+import { Atkinson_Hyperlegible_Next, Lora } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const newsreader = Newsreader({
+// Headings: a warm, established book serif with calligraphic roots.
+const lora = Lora({
   subsets: ["latin"],
-  axes: ["opsz"],
-  variable: "--font-newsreader",
+  style: ["normal", "italic"],
+  variable: "--font-lora",
   display: "swap",
 });
 
-const publicSans = Public_Sans({
+// Body: drawn for the Braille Institute so it stays readable for people with low vision.
+const atkinson = Atkinson_Hyperlegible_Next({
   subsets: ["latin"],
-  variable: "--font-public-sans",
+  variable: "--font-atkinson",
   display: "swap",
+  // Next has no size-adjust metrics for this family yet, so fall back to the system sans as is.
+  adjustFontFallback: false,
+  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -46,13 +51,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a1310",
-  colorScheme: "dark",
+  themeColor: "#faf7f0",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-US" className={`${newsreader.variable} ${publicSans.variable}`}>
+    <html lang="en-US" className={`${lora.variable} ${atkinson.variable}`}>
       <body className="min-h-dvh antialiased">{children}</body>
     </html>
   );

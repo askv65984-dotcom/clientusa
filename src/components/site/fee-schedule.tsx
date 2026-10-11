@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { priceDisplay } from "@/lib/format";
 import type { Package } from "@/lib/types";
 import { Photo, type PhotoKey } from "./photo";
-import { CheckIcon } from "./sections";
+import { CheckBadge } from "./sections";
 
 // Packages have no photo field, so they take these in display order.
 const packagePhotos: PhotoKey[] = ["pkg-1", "pkg-2", "pkg-3", "pkg-4", "pkg-5", "pkg-6"];
@@ -18,7 +18,7 @@ function defaultCta(pkg: Package) {
   return "Buy now";
 }
 
-/** Package cards with a photo, what is included, the fee and the checkout button. */
+/** Packages as two-part tickets: the photo and description, then past a perforation the fee, what is included and the button. */
 export function FeeSchedule({ packages }: { packages: Package[] }) {
   if (packages.length === 0) {
     return (
@@ -27,7 +27,7 @@ export function FeeSchedule({ packages }: { packages: Package[] }) {
           Our packages are being updated. Book a video consultation and we will walk you through current options
           and fees.
         </p>
-        <Link href="/book" className="btn btn-gold mt-6">
+        <Link href="/book" className="btn btn-accent mt-6">
           Book a consultation
         </Link>
       </div>
@@ -41,39 +41,41 @@ export function FeeSchedule({ packages }: { packages: Package[] }) {
           const price = priceDisplay(pkg.billing, pkg.price_cents);
           const ctaLabel = pkg.cta_label || defaultCta(pkg);
           const featured = Boolean(pkg.badge);
+          const paper = featured ? "bg-panel-2" : "bg-panel";
           return (
             <li
               key={pkg.id}
               id={pkg.slug}
               data-reveal
               style={{ "--d": `${index * 110}ms` } as CSSProperties}
-              className={`group relative flex scroll-mt-28 flex-col overflow-hidden rounded-[22px] border transition-all duration-500 hover:-translate-y-1.5 ${
-                featured
-                  ? "border-gold/70 bg-panel shadow-[0_30px_80px_-40px_rgba(216,183,126,0.55)]"
-                  : "border-line bg-panel/70 hover:border-line-strong"
-              }`}
+              className="group flex scroll-mt-28 flex-col transition-transform duration-500 hover:-translate-y-1.5"
             >
-              <div className="relative aspect-[16/9] overflow-hidden">
-                <Photo
-                  name={packagePhoto(index)}
-                  alt=""
-                  sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                  className="object-cover transition-transform duration-[1400ms] group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-panel via-panel/40 to-transparent" />
-                {pkg.badge ? (
-                  <p className="absolute top-4 left-4 rounded-full bg-gold px-3.5 py-1 text-sm font-semibold text-night">{pkg.badge}</p>
-                ) : null}
+              {/* Top half of the ticket: what it is */}
+              <div className={`ticket-top rounded-t-[1.75rem] p-2.5 pb-0 ${paper}`}>
+                <div className="relative aspect-[16/9] overflow-hidden rounded-[1.3rem]">
+                  <Photo
+                    name={packagePhoto(index)}
+                    alt=""
+                    sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                    className="object-cover transition-transform duration-[1400ms] group-hover:scale-[1.06]"
+                  />
+                  {pkg.badge ? (
+                    <p className="absolute top-3 left-3 rounded-full bg-accent px-3.5 py-1 text-sm font-bold text-on-accent">{pkg.badge}</p>
+                  ) : null}
+                </div>
+                <div className="px-4 pt-6 pb-8 sm:px-5">
+                  <h3 className="text-[1.75rem] leading-[1.12] text-fg">{pkg.name}</h3>
+                  {pkg.duration_label ? <p className="mt-2 font-bold text-accent">{pkg.duration_label}</p> : null}
+                  {pkg.summary ? <p className="mt-3 text-fg-muted">{pkg.summary}</p> : null}
+                </div>
               </div>
 
-              <div className="flex flex-1 flex-col p-7 pt-2">
-                <h3 className="text-[1.875rem] leading-[1.1] text-fg">{pkg.name}</h3>
-                {pkg.duration_label ? <p className="mt-2 text-[0.9375rem] text-gold">{pkg.duration_label}</p> : null}
-                {pkg.summary ? <p className="mt-4 text-fg-muted">{pkg.summary}</p> : null}
-
-                <p className="mt-6 border-t border-line pt-6">
-                  <span className="font-serif text-[2.75rem] leading-none text-fg">{price.amount}</span>
-                  <span className="ml-2 text-[0.9375rem] text-fg-soft">{price.unit}</span>
+              {/* Bottom half, past the perforation: the fee, what is included and the button */}
+              <div className={`ticket-bottom relative flex flex-1 flex-col rounded-b-[1.75rem] px-6 pt-7 pb-7 sm:px-7 ${paper}`}>
+                <span aria-hidden="true" className={`absolute inset-x-6 top-0 border-t-2 border-dashed ${featured ? "border-accent/60" : "border-line-strong"}`} />
+                <p>
+                  <span className={`font-serif text-[2.75rem] leading-none font-semibold ${featured ? "text-accent" : "text-fg"}`}>{price.amount}</span>
+                  <span className="ml-2 text-fg-soft">{price.unit}</span>
                 </p>
 
                 {pkg.features.length > 0 ? (
@@ -82,7 +84,7 @@ export function FeeSchedule({ packages }: { packages: Package[] }) {
                     <ul className="mt-6 flex-1 space-y-3">
                       {pkg.features.map((feature) => (
                         <li key={feature} className="flex gap-3 text-[0.975rem] text-fg">
-                          <CheckIcon />
+                          <CheckBadge />
                           <span>{feature}</span>
                         </li>
                       ))}
@@ -98,7 +100,7 @@ export function FeeSchedule({ packages }: { packages: Package[] }) {
                       {pkg.cta_label || "Book a consultation"}
                     </Link>
                   ) : (
-                    <Link href={`/checkout/${pkg.slug}`} className={`btn w-full ${featured ? "btn-gold" : "btn-ghost"}`}>
+                    <Link href={`/checkout/${pkg.slug}`} className={`btn w-full ${featured ? "btn-accent" : "btn-ghost"}`}>
                       {ctaLabel}
                     </Link>
                   )}
@@ -109,7 +111,7 @@ export function FeeSchedule({ packages }: { packages: Package[] }) {
         })}
       </ul>
       <p className="mt-8 flex items-center justify-center gap-2 text-center text-[0.9375rem] text-fg-soft">
-        <svg viewBox="0 0 20 20" aria-hidden="true" className="size-4 shrink-0 text-gold">
+        <svg viewBox="0 0 20 20" aria-hidden="true" className="size-4 shrink-0 text-accent">
           <rect x="4" y="9" width="12" height="8" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none" />
           <path d="M7 9V6.5a3 3 0 016 0V9" stroke="currentColor" strokeWidth="1.5" fill="none" />
         </svg>

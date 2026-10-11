@@ -1,14 +1,32 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { FaqList } from "./faq-list";
+import { BrandMark } from "./logo";
 import { Photo, type PhotoKey } from "./photo";
 
 const delay = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
-export function CheckIcon({ className = "mt-1 size-4 shrink-0 text-gold" }: { className?: string }) {
+/** Section backgrounds: pine (the default), a deeper pine, and warm walnut. */
+export type Tone = "base" | "deep" | "walnut";
+const toneClass: Record<Tone, string> = { base: "bg-base", deep: "bg-deep", walnut: "bg-walnut" };
+
+/** The practice-area color for a label such as "Telehealth", "Pharmacy" or "All practice areas". */
+export function practiceTone(label: string) {
+  if (/^all\b/i.test(label)) return "tone-all";
+  if (/tele/i.test(label)) return "tone-telehealth";
+  if (/pharm/i.test(label)) return "tone-pharmacy";
+  return "tone-healthcare";
+}
+
+/** A label with a dot in its practice-area color. */
+export function Tag({ label, className = "" }: { label: string; className?: string }) {
+  return <span className={`tag ${practiceTone(label)} ${className}`}>{label}</span>;
+}
+
+export function CheckIcon({ className = "size-3 text-accent" }: { className?: string }) {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true" className={className}>
-      <path d="M4 10.5l4 4 8-9" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <path d="M4 10.5l4 4 8-9" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -18,6 +36,15 @@ export function ArrowIcon({ className = "size-4" }: { className?: string }) {
     <svg viewBox="0 0 20 20" aria-hidden="true" className={className}>
       <path d="M4 10h11M11 5l5 5-5 5" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
+  );
+}
+
+/** A check in a soft brass circle, for lists of what is included. */
+export function CheckBadge() {
+  return (
+    <span aria-hidden="true" className="mt-[0.2rem] grid size-5 shrink-0 place-items-center rounded-full bg-accent/15">
+      <CheckIcon />
+    </span>
   );
 }
 
@@ -49,8 +76,8 @@ export function revealEnd(text: string, start = 0, step = 65) {
 }
 
 /**
- * The rounded, inset panel at the top of every page: a photo or video that settles into place,
- * shaded toward the bottom left so the white text stays readable.
+ * The top of every inner page: a wide rounded photo, with a card of words that rises over its
+ * lower edge.
  */
 export function HeroFrame({
   media,
@@ -62,18 +89,20 @@ export function HeroFrame({
   children: ReactNode;
 }) {
   const height = {
-    page: "min-h-[68vh] md:min-h-[74vh]",
-    compact: "min-h-[46vh] md:min-h-[50vh]",
+    page: "h-[44svh] min-h-[18rem] md:h-[66vh]",
+    compact: "h-[34svh] min-h-[15rem] md:h-[50vh]",
   }[size];
   return (
     <section className="px-3 pt-[5.25rem] sm:px-4 md:pt-[6.25rem]">
-      <div className={`hero-frame relative isolate mx-auto flex max-w-[1880px] items-end overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem] ${height}`}>
-        <div className="hero-media absolute inset-0 -z-10">{media}</div>
-        {/* Neutral shade, so gold and color photos keep their color while white text stays readable. */}
-        <div className="absolute inset-0 -z-10 bg-black/15" />
-        <div className="absolute inset-0 -z-10 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
-        <div className="absolute inset-0 -z-10 bg-linear-to-r from-black/65 via-black/20 to-transparent" />
-        <div className="page-container w-full pt-28 pb-10 md:pb-14 lg:pb-16">{children}</div>
+      <div className="hero-frame mx-auto max-w-[1880px]">
+        <div className={`soft-shadow relative overflow-hidden rounded-[1.75rem] md:rounded-[2.75rem] ${height}`}>
+          <div className="hero-media absolute inset-0">{media}</div>
+        </div>
+        <div className="page-container relative -mt-20 md:-mt-36">
+          <div className="soft-shadow relative max-w-[50rem] rounded-[1.75rem] bg-panel px-6 pt-7 pb-8 sm:px-10 sm:pt-9 sm:pb-10 md:rounded-[2.25rem] md:px-12">
+            {children}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -102,16 +131,16 @@ export function PageHero({
       media={<Photo name={image} alt="" priority sizes="100vw" className="kenburns object-cover" />}
     >
       {breadcrumbs ? <div className="rise">{breadcrumbs}</div> : null}
-      <h1 className="mt-6 max-w-[20ch] text-display text-fg">
+      <h1 className={`max-w-[20ch] text-[clamp(2.35rem,1.5rem+2.9vw,3.9rem)] leading-[1.08] font-semibold text-fg ${breadcrumbs ? "mt-4" : ""}`}>
         <RevealWords text={title} start={250} />
       </h1>
       {lede ? (
-        <p className="rise mt-6 max-w-[42rem] text-lede text-fg/80" style={delay(after + 100)}>
+        <p className="rise mt-5 max-w-[38rem] text-lede text-fg-muted" style={delay(after + 100)}>
           {lede}
         </p>
       ) : null}
       {children ? (
-        <div className="rise mt-9 flex flex-wrap gap-3" style={delay(after + 250)}>
+        <div className="rise mt-7 flex flex-wrap gap-3" style={delay(after + 250)}>
           {children}
         </div>
       ) : null}
@@ -120,13 +149,11 @@ export function PageHero({
 }
 
 export function SectionHeading({
-  kicker,
   title,
   intro,
   center = false,
   id,
 }: {
-  kicker?: string;
   title: string;
   intro?: ReactNode;
   center?: boolean;
@@ -134,22 +161,24 @@ export function SectionHeading({
 }) {
   return (
     <div data-reveal className={center ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
-      {kicker ? <p className="kicker">{kicker}</p> : null}
-      <h2 id={id} className="mt-4 text-section text-fg">
+      <h2 id={id} className="text-section text-fg">
         {title}
       </h2>
-      {intro ? <div className="mt-5 text-lede text-fg-muted">{intro}</div> : null}
+      {intro ? <div className={`mt-5 max-w-[42rem] text-lede text-fg-muted ${center ? "mx-auto" : ""}`}>{intro}</div> : null}
     </div>
   );
 }
 
-/** Photo on one side, copy on the other. */
+/**
+ * Photo on one side, copy on the other. Facing right, the photo is an arched doorway;
+ * reversed, it is a landscape speech bubble. A tinted block in the same shape sits offset behind it.
+ */
 export function SplitSection({
   image,
   imageAlt,
   reverse = false,
-  tone = "night",
-  kicker,
+  tone = "base",
+  tag,
   title,
   children,
   id,
@@ -157,29 +186,39 @@ export function SplitSection({
   image: PhotoKey;
   imageAlt?: string;
   reverse?: boolean;
-  tone?: "night" | "deep";
-  kicker?: string;
+  tone?: Tone;
+  /** A practice area, shown above the title in its color. */
+  tag?: string;
   title: string;
   children: ReactNode;
   id?: string;
 }) {
   return (
-    <section id={id} className={`scroll-mt-24 ${tone === "deep" ? "bg-deep" : ""}`}>
-      <div className="page-container grid items-center gap-14 py-20 md:py-28 lg:grid-cols-2 lg:gap-20">
-        <div data-reveal={reverse ? "right" : "left"} className={`frame ${reverse ? "frame-reverse lg:order-2" : ""}`}>
-          <div className="relative z-10 aspect-[4/3] overflow-hidden rounded-[22px]">
-            <Photo
-              name={image}
-              alt={imageAlt}
-              sizes="(min-width: 1024px) 40vw, 100vw"
-              className="object-cover transition-transform duration-[1400ms] ease-out hover:scale-[1.06]"
+    <section id={id} className={`scroll-mt-24 ${toneClass[tone]}`}>
+      <div className="page-container grid items-center gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-10">
+        <div
+          data-reveal="zoom"
+          className={reverse ? "lg:order-2 lg:col-span-6 lg:col-start-7" : "mx-auto w-full max-w-[26rem] lg:col-span-5 lg:max-w-none"}
+        >
+          <div className="relative">
+            <div
+              aria-hidden="true"
+              className={`absolute inset-0 translate-x-4 translate-y-4 md:translate-x-6 md:translate-y-6 ${reverse ? "shape-bubble-r offset-clay" : "shape-arch offset-sage"}`}
             />
+            <div className={`soft-shadow relative overflow-hidden bg-panel ${reverse ? "shape-bubble-r aspect-[5/4]" : "shape-arch aspect-[4/5]"}`}>
+              <Photo
+                name={image}
+                alt={imageAlt}
+                sizes={reverse ? "(min-width: 1024px) 45vw, 100vw" : "(min-width: 1024px) 36vw, 26rem"}
+                className="object-cover transition-transform duration-[1400ms] ease-out hover:scale-[1.04]"
+              />
+            </div>
           </div>
         </div>
-        <div data-reveal={reverse ? "left" : "right"}>
-          {kicker ? <p className="kicker">{kicker}</p> : null}
-          <h2 className="mt-4 text-section text-fg">{title}</h2>
-          <div className="mt-6 space-y-5 text-[1.0625rem] text-fg-muted">{children}</div>
+        <div data-reveal className={reverse ? "lg:order-1 lg:col-span-6 lg:pr-6" : "lg:col-span-6 lg:col-start-7"}>
+          {tag ? <Tag label={tag} className="mb-4" /> : null}
+          <h2 className="text-section text-fg">{title}</h2>
+          <div className="mt-6 space-y-5 text-fg-muted">{children}</div>
         </div>
       </div>
     </section>
@@ -190,8 +229,8 @@ export function CheckList({ items, columns = 1 }: { items: string[]; columns?: 1
   return (
     <ul className={`grid gap-3.5 ${columns === 2 ? "sm:grid-cols-2" : ""}`}>
       {items.map((item) => (
-        <li key={item} className="flex gap-3 text-fg">
-          <CheckIcon />
+        <li key={item} className="flex gap-3.5 text-fg">
+          <CheckBadge />
           <span>{item}</span>
         </li>
       ))}
@@ -199,41 +238,116 @@ export function CheckList({ items, columns = 1 }: { items: string[]; columns?: 1
   );
 }
 
+/**
+ * What clients tell us, set as messages. An optional reply from us closes the thread,
+ * signed with the Anoka mark.
+ */
+export function Conversation({ lines, reply }: { lines: string[]; reply?: ReactNode }) {
+  return (
+    <ul className="space-y-3">
+      {lines.map((line, index) => (
+        <li key={line} data-reveal style={delay(index * 80)} className="flex">
+          <p className="shape-bubble soft-shadow-sm max-w-[34rem] bg-panel px-5 py-3.5 text-fg">{line}</p>
+        </li>
+      ))}
+      {reply ? (
+        <li data-reveal style={delay(lines.length * 80 + 100)} className="flex items-end justify-end gap-3 pt-4">
+          <div className="shape-bubble-r soft-shadow-sm max-w-[30rem] bg-accent px-5 py-3.5 font-bold text-on-accent">{reply}</div>
+          <span className="theme-dark grid size-11 shrink-0 place-items-center rounded-full bg-base">
+            <BrandMark className="size-7" alt="Anoka Advisors" />
+          </span>
+        </li>
+      ) : null}
+    </ul>
+  );
+}
+
+/** A full section built around a Conversation: the heading and a photo on one side, the messages on the other. */
+export function ConversationSection({
+  id,
+  title,
+  intro,
+  image,
+  lines,
+  reply,
+  tone = "walnut",
+  children,
+}: {
+  id: string;
+  title: string;
+  intro?: string;
+  image: PhotoKey;
+  lines: string[];
+  reply?: ReactNode;
+  tone?: Tone;
+  children?: ReactNode;
+}) {
+  return (
+    <section aria-labelledby={id} className={`py-20 md:py-28 ${toneClass[tone]}`}>
+      <div className="page-container grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div data-reveal className="lg:col-span-5">
+          <h2 id={id} className="text-section text-fg">
+            {title}
+          </h2>
+          {intro ? <p className="mt-5 text-lede text-fg-muted">{intro}</p> : null}
+          <div className="soft-shadow shape-bubble relative mt-10 hidden aspect-[5/4] overflow-hidden bg-panel lg:block">
+            <Photo name={image} alt="" sizes="(min-width: 1024px) 34vw, 1px" className="object-cover" />
+          </div>
+        </div>
+        <div className="lg:col-span-7">
+          <Conversation lines={lines} reply={reply} />
+          {children}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export type ImageCardItem = { image: PhotoKey; title: string; body?: string; href?: string; meta?: string };
 
-/** Tall photo card with the title over a dark gradient. */
-export function ImageCard({ item, sizes = "(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw", ratio = "aspect-[4/5]" }: { item: ImageCardItem; sizes?: string; ratio?: string }) {
+/** Photo with the words underneath it. Linked cards get a round arrow on the photo. */
+export function ImageCard({
+  item,
+  sizes = "(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw",
+  ratio = "aspect-[4/3]",
+}: {
+  item: ImageCardItem;
+  sizes?: string;
+  ratio?: string;
+}) {
   const inner = (
     <>
-      <Photo name={item.image} alt="" sizes={sizes} className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110" />
-      <div className="absolute inset-0 bg-linear-to-t from-night via-night/55 to-night/5 transition-opacity duration-500 group-hover:opacity-90" />
-      <div className="absolute inset-x-0 bottom-0 p-6">
-        {item.meta ? <p className="mb-2 text-sm font-semibold text-gold">{item.meta}</p> : null}
-        <h3 className="text-[1.625rem] leading-tight text-fg">{item.title}</h3>
-        {item.body ? <p className="mt-2 text-[0.975rem] text-fg-muted">{item.body}</p> : null}
+      <div className={`soft-shadow relative ${ratio} overflow-hidden rounded-[1.75rem] bg-panel transition-transform duration-300 group-hover:-translate-y-1`}>
+        <Photo name={item.image} alt="" sizes={sizes} className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]" />
         {item.href ? (
-          <span className="mt-4 inline-flex size-10 items-center justify-center rounded-full border border-gold/50 text-gold transition-all duration-300 group-hover:translate-x-1 group-hover:bg-gold group-hover:text-night">
+          <span
+            aria-hidden="true"
+            className="absolute right-4 bottom-4 grid size-11 place-items-center rounded-full bg-panel text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-on-accent"
+          >
             <ArrowIcon />
           </span>
         ) : null}
       </div>
+      <div className="mt-5 pr-2">
+        {item.meta ? <Tag label={item.meta} className="mb-2" /> : null}
+        <h3 className="text-[1.5rem] leading-snug text-fg transition-colors group-hover:text-accent-strong">{item.title}</h3>
+        {item.body ? <p className="mt-2 text-fg-muted">{item.body}</p> : null}
+      </div>
     </>
   );
-  const classes = `group relative block ${ratio} overflow-hidden rounded-[20px] border border-line bg-panel`;
   return item.href ? (
-    <Link href={item.href} className={`${classes} no-underline`}>
-      <span className="sr-only">{item.title}</span>
+    <Link href={item.href} className="group block no-underline">
       {inner}
     </Link>
   ) : (
-    <div className={classes}>{inner}</div>
+    <div className="group">{inner}</div>
   );
 }
 
 export function ImageCardGrid({ items, columns = 3 }: { items: ImageCardItem[]; columns?: 2 | 3 | 4 }) {
   const cols = { 2: "sm:grid-cols-2", 3: "sm:grid-cols-2 lg:grid-cols-3", 4: "sm:grid-cols-2 lg:grid-cols-4" }[columns];
   return (
-    <div className={`grid gap-6 ${cols}`}>
+    <div className={`grid gap-x-6 gap-y-12 ${cols}`}>
       {items.map((item, index) => (
         <div key={item.title} data-reveal style={delay(index * 90)}>
           <ImageCard item={item} />
@@ -243,22 +357,21 @@ export function ImageCardGrid({ items, columns = 3 }: { items: ImageCardItem[]; 
   );
 }
 
-/** Photo-topped cards with body copy below the image. */
+/** Postcards: a photo set inside a panel, with the words below it. */
 export function FeatureCards({ items, columns = 3 }: { items: ImageCardItem[]; columns?: 2 | 3 | 4 }) {
   const cols = { 2: "md:grid-cols-2", 3: "md:grid-cols-2 lg:grid-cols-3", 4: "sm:grid-cols-2 lg:grid-cols-4" }[columns];
   return (
-    <div className={`grid gap-6 ${cols}`}>
+    <div className={`grid gap-5 ${cols}`}>
       {items.map((item, index) => (
-        <article key={item.title} data-reveal style={delay(index * 90)} className="card group relative overflow-hidden transition-colors duration-300 hover:border-gold/50">
-          <div className="relative aspect-[16/10] overflow-hidden">
-            <Photo name={item.image} alt="" sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw" className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110" />
-            <div className="absolute inset-0 bg-linear-to-t from-night/70 to-transparent" />
+        <article key={item.title} data-reveal style={delay(index * 90)} className="card lift group relative flex flex-col p-2.5">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-[1.3rem]">
+            <Photo name={item.image} alt="" sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw" className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]" />
           </div>
-          <div className="p-6">
-            {item.meta ? <p className="mb-1.5 text-sm font-semibold text-gold">{item.meta}</p> : null}
-            <h3 className="text-[1.5rem] leading-snug text-fg">
+          <div className="px-4 pt-5 pb-5">
+            {item.meta ? <Tag label={item.meta} className="mb-2" /> : null}
+            <h3 className="text-[1.4rem] leading-snug text-fg">
               {item.href ? (
-                <Link href={item.href} className="text-fg no-underline after:absolute after:inset-0 hover:text-gold-strong">
+                <Link href={item.href} className="text-fg no-underline after:absolute after:inset-0 after:rounded-[1.75rem] hover:text-accent-strong">
                   {item.title}
                 </Link>
               ) : (
@@ -273,59 +386,73 @@ export function FeatureCards({ items, columns = 3 }: { items: ImageCardItem[]; c
   );
 }
 
-/** Numbered sequence with a photo per step. Only for content that really is a sequence. */
+/**
+ * A sequence of steps along a dashed line, each with a round photo and its number.
+ * Only for content that really is a sequence.
+ */
 export function Steps({ steps }: { steps: { image: PhotoKey; title: string; body: string }[] }) {
+  const four = steps.length > 3;
   return (
-    <ol className={`grid gap-6 sm:grid-cols-2 ${steps.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}>
-      {steps.map((step, index) => (
-        <li key={step.title} data-reveal style={delay(index * 120)} className="card group relative overflow-hidden">
-          <div className="relative aspect-[4/3] overflow-hidden">
-            <Photo name={step.image} alt="" sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 90vw" className="object-cover transition-transform duration-[1200ms] group-hover:scale-110" />
-            <div className="absolute inset-0 bg-linear-to-t from-panel via-panel/30 to-transparent" />
-            <span className="absolute bottom-3 left-5 font-serif text-[3.5rem] leading-none text-gold">{index + 1}</span>
-          </div>
-          <div className="p-6 pt-3">
-            <h3 className="text-[1.5rem] text-fg">{step.title}</h3>
-            <p className="mt-2 text-[0.975rem] text-fg-muted">{step.body}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
+    <div className="relative">
+      <span
+        aria-hidden="true"
+        className={`absolute top-[4.5rem] left-[4.5rem] hidden border-t-2 border-dashed border-line-strong lg:block ${four ? "right-[calc(25%-6rem)]" : "right-[calc(33.333%-5.833rem)]"}`}
+      />
+      <ol className={`relative grid gap-12 sm:grid-cols-2 ${four ? "lg:grid-cols-4" : "lg:grid-cols-3"} lg:gap-8`}>
+        {steps.map((step, index) => (
+          <li key={step.title} data-reveal style={delay(index * 120)}>
+            <div className="relative size-36">
+              <div className="soft-shadow absolute inset-0 overflow-hidden rounded-full bg-panel">
+                <Photo name={step.image} alt="" sizes="9rem" className="object-cover" />
+              </div>
+              <span className="absolute -right-1 -bottom-1 grid size-12 place-items-center rounded-full bg-accent font-serif text-[1.375rem] font-semibold text-on-accent ring-4 ring-[var(--surface)]">
+                {index + 1}
+              </span>
+            </div>
+            <h3 className="mt-7 text-[1.5rem] text-fg">{step.title}</h3>
+            <p className="mt-2 max-w-[22rem] text-fg-muted">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 
-/** Wide photo band with a dark overlay. Children sit on top. */
+/** Wide photo band, shaded toward the side the words sit on. Children sit on top. */
 export function PhotoBand({ image, children, className = "" }: { image: PhotoKey; children: ReactNode; className?: string }) {
   return (
-    <section className={`relative isolate overflow-hidden ${className}`}>
+    <section className={`theme-dark relative isolate overflow-hidden ${className}`}>
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <Photo name={image} alt="" sizes="100vw" className="parallax object-cover" />
-        <div className="absolute inset-0 bg-night/55" />
-        <div className="absolute inset-0 bg-linear-to-r from-night via-night/65 to-night/10" />
+        <div className="absolute inset-0 bg-base/30" />
+        <div className="absolute inset-0 bg-linear-to-r from-base via-base/80 to-base/5" />
       </div>
       {children}
     </section>
   );
 }
 
+/** The closing invitation: a walnut panel with a photo of someone at work. */
 export function CtaBand({
   image = "cta-consult",
-  title = "Start with an initial consultation.",
-  body = "Tell us what is getting in the way. We will tell you plainly whether we can help and what it would take.",
+  title = "Let’s talk about what’s getting in the way.",
+  body = "Tell us what is happening. We will tell you plainly whether we can help and what it would take.",
 }: {
   image?: PhotoKey;
   title?: string;
   body?: string;
 }) {
   return (
-    <PhotoBand image={image}>
-      <div className="page-container py-24 md:py-32">
-        <div data-reveal className="max-w-3xl">
-          <p className="kicker">Next step</p>
-          <h2 className="mt-4 text-section text-fg">{title}</h2>
-          <p className="mt-5 text-lede text-fg-muted">{body}</p>
+    <section className="px-3 py-16 sm:px-4 md:py-24">
+      <div data-reveal className="theme-dark soft-shadow mx-auto grid max-w-[78rem] overflow-hidden rounded-[2rem] bg-base md:rounded-[2.5rem] lg:grid-cols-12">
+        <div className="relative aspect-[16/10] lg:order-2 lg:col-span-5 lg:aspect-auto">
+          <Photo name={image} alt="" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
+        </div>
+        <div className="px-6 py-12 sm:px-12 md:py-16 lg:col-span-7 lg:py-20 lg:pr-14">
+          <h2 className="text-section text-fg">{title}</h2>
+          <p className="mt-5 max-w-[36rem] text-lede text-fg-muted">{body}</p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <Link href="/book" className="btn btn-gold">
+            <Link href="/book" className="btn btn-accent">
               Book a consultation
             </Link>
             <Link href="/pricing" className="btn btn-ghost">
@@ -334,11 +461,11 @@ export function CtaBand({
           </div>
         </div>
       </div>
-    </PhotoBand>
+    </section>
   );
 }
 
-/** Questions beside a tall photo that stays in view while the list scrolls. */
+/** Questions beside an arched photo that stays in view while the list scrolls. */
 export function FaqSection({
   image,
   title,
@@ -350,25 +477,23 @@ export function FaqSection({
   title: string;
   intro?: string;
   faqs: { question: string; answer: string }[];
-  tone?: "night" | "deep";
+  tone?: Tone;
 }) {
   return (
-    <section aria-labelledby="faq-heading" className={tone === "deep" ? "bg-deep" : ""}>
+    <section aria-labelledby="faq-heading" className={toneClass[tone]}>
       <div className="page-container grid gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-28">
-            <SectionHeading kicker="Questions" title={title} id="faq-heading" intro={intro} />
-            <div data-reveal="zoom" className="frame mt-10 hidden lg:block">
-              <div className="relative z-10 aspect-[4/5] overflow-hidden rounded-[22px]">
-                <Photo name={image} alt="" sizes="35vw" className="object-cover" />
+            <SectionHeading title={title} id="faq-heading" intro={intro} />
+            <div data-reveal="zoom" className="relative mt-10 hidden max-w-[22rem] lg:block">
+              <div aria-hidden="true" className="shape-arch offset-sage absolute inset-0 translate-x-5 translate-y-5" />
+              <div className="soft-shadow shape-arch relative aspect-[4/5] overflow-hidden bg-panel">
+                <Photo name={image} alt="" sizes="22rem" className="object-cover" />
               </div>
             </div>
           </div>
         </div>
         <div className="lg:col-span-7">
-          <div data-reveal="zoom" className="relative mb-8 aspect-[16/9] overflow-hidden rounded-[22px] lg:hidden">
-            <Photo name={image} alt="" sizes="100vw" className="object-cover" />
-          </div>
           <FaqList faqs={faqs} />
         </div>
       </div>
@@ -376,18 +501,18 @@ export function FaqSection({
   );
 }
 
-/** Endless strip of short phrases. */
-export function Marquee({ items }: { items: string[] }) {
+/** Endless strip of short phrases, separated by small brass crosses. */
+export function Marquee({ items, tone = "deep" }: { items: string[]; tone?: Tone }) {
   const row = [...items, ...items];
   return (
-    <div className="relative overflow-hidden border-y border-line bg-deep py-6" aria-label="Focus areas">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-linear-to-r from-deep to-transparent" />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-linear-to-l from-deep to-transparent" />
-      <ul className="flex w-max animate-marquee gap-10 hover:[animation-play-state:paused]">
+    <div className={`relative overflow-hidden py-7 ${toneClass[tone]}`} aria-label="Focus areas">
+      <ul className="flex w-max animate-marquee gap-9 hover:[animation-play-state:paused]">
         {row.map((item, index) => (
-          <li key={`${item}-${index}`} aria-hidden={index >= items.length} className="flex items-center gap-10 font-serif text-[1.75rem] whitespace-nowrap text-fg/85">
+          <li key={`${item}-${index}`} aria-hidden={index >= items.length} className="flex items-center gap-9 font-serif text-[1.625rem] whitespace-nowrap text-fg/90">
             {item}
-            <span aria-hidden="true" className="size-2 rotate-45 bg-gold" />
+            <svg viewBox="0 0 12 12" aria-hidden="true" className="size-3 text-accent">
+              <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+            </svg>
           </li>
         ))}
       </ul>

@@ -30,7 +30,7 @@ export function RevealObserver() {
           revealed.add(element);
           observer.unobserve(element);
 
-          const from = OFFSETS[element.dataset.reveal ?? ""] ?? "translateY(32px)";
+          const from = OFFSETS[element.dataset.reveal ?? ""] ?? "translateY(24px)";
           const delay = Number.parseFloat(getComputedStyle(element).getPropertyValue("--d")) || 0;
           element.animate(
             [

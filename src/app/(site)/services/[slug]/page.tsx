@@ -7,7 +7,9 @@ import { Carousel } from "@/components/site/carousel";
 import { InsightCard } from "@/components/site/insight-card";
 import { JsonLd } from "@/components/site/json-ld";
 import {
+  CheckBadge,
   CheckList,
+  ConversationSection,
   CtaBand,
   FaqSection,
   FeatureCards,
@@ -111,7 +113,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         title={service.heading}
         lede={service.summary}
       >
-        <Link href="/book" className="btn btn-gold">
+        <Link href="/book" className="btn btn-accent">
           Book a consultation
         </Link>
         <Link href="/pricing" className="btn btn-ghost">
@@ -120,7 +122,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       </PageHero>
 
       {/* 2. Overview */}
-      <SplitSection image={images.overview} kicker="Overview" title={`How we help with ${service.name.toLowerCase()}`}>
+      <SplitSection image={images.overview} title={`How we help with ${service.name.toLowerCase()}`}>
         <p className="text-lede text-fg">{service.intro}</p>
         <CheckList items={service.outcomes.slice(0, 3)} />
       </SplitSection>
@@ -128,21 +130,25 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       {/* 3. Focus strip */}
       <Marquee items={service.focusAreas.map((area) => area.title)} />
 
-      {/* 4. Challenges */}
-      <SplitSection image={images.challenges} reverse tone="deep" kicker="Common challenges" title="What we usually hear on the first call">
-        <ul className="space-y-4">
-          {service.challenges.map((challenge) => (
-            <li key={challenge} className="flex gap-4 rounded-2xl border border-line bg-night/40 px-5 py-4 text-fg">
-              <span aria-hidden="true" className="mt-2 size-2 shrink-0 rotate-45 bg-gold" />
-              {challenge}
-            </li>
-          ))}
-        </ul>
-      </SplitSection>
+      {/* 4. Challenges, as clients describe them */}
+      <ConversationSection
+        id="challenges-heading"
+        title="What we usually hear on the first call"
+        image={images.challenges}
+        lines={service.challenges}
+        reply={
+          <>
+            Sound familiar?{" "}
+            <Link href="/book#initial" className="text-on-accent underline decoration-base/40 underline-offset-4 hover:decoration-base">
+              Tell us about it on an initial consultation.
+            </Link>
+          </>
+        }
+      />
 
       {/* 5. Who this is for */}
       <section className="page-container py-20 md:py-28">
-        <SectionHeading kicker="Who this is for" title="Organizations we work with in this area" />
+        <SectionHeading title="Organizations we work with in this area" />
         <div className="mt-12">
           <ImageCardGrid columns={4} items={service.whoFor.map((title, index) => ({ image: images.whoFor[index], title }))} />
         </div>
@@ -151,11 +157,11 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       {/* 6. Focus areas */}
       <section className="overflow-hidden bg-deep py-20 md:py-28">
         <div className="page-container">
-          <SectionHeading kicker="Where we help" title="Our focus areas" intro="Six places where small operational changes make the biggest difference." />
+          <SectionHeading title="Our focus areas" intro="Six places where small operational changes make the biggest difference." />
           <div data-reveal className="mt-12">
             <Carousel label={`${service.name} focus areas`}>
               {service.focusAreas.map((area, index) => (
-                <ImageCard key={area.title} item={{ image: images.focus[index], title: area.title, body: area.body, meta: `Focus area ${index + 1}` }} />
+                <ImageCard key={area.title} item={{ image: images.focus[index], title: area.title, body: area.body }} />
               ))}
             </Carousel>
           </div>
@@ -163,15 +169,15 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       </section>
 
       {/* 7. Approach */}
-      <SplitSection image={images.approach} kicker="Our approach" title="How the work unfolds">
+      <SplitSection image={images.approach} title="How the work unfolds">
         <ol className="space-y-6">
           {service.approach.map((step, index) => (
             <li key={step.title} className="flex gap-5">
-              <span className="grid size-11 shrink-0 place-items-center rounded-full border border-gold/60 font-serif text-xl text-gold">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-accent font-serif text-xl font-semibold text-on-accent">
                 {index + 1}
               </span>
               <div>
-                <h3 className="font-sans text-lg font-semibold tracking-normal text-fg">{step.title}</h3>
+                <h3 className="font-sans text-lg font-bold tracking-normal text-fg">{step.title}</h3>
                 <p className="mt-1">{step.body}</p>
               </div>
             </li>
@@ -180,7 +186,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       </SplitSection>
 
       {/* 8. Deliverables */}
-      <SplitSection image={images.deliverables} reverse tone="deep" kicker="What you receive" title="Deliverables your team can use">
+      <SplitSection image={images.deliverables} reverse tone="deep" title="Deliverables your team can use">
         <p>Deliverables depend on the package you choose. These are the working documents clients most often receive.</p>
         <CheckList items={service.deliverables} />
       </SplitSection>
@@ -188,12 +194,12 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       {/* 9. Outcomes */}
       <PhotoBand image={images.outcomes}>
         <div className="page-container py-20 md:py-28">
-          <SectionHeading kicker="What we work toward" title="The outcomes we aim for" />
-          <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          <SectionHeading title="The outcomes we aim for" />
+          <ul className="mt-12 grid max-w-[46rem] gap-3 sm:grid-cols-2">
             {service.outcomes.map((outcome, index) => (
-              <li key={outcome} data-reveal style={delay(index * 90)} className="glass rounded-2xl p-6">
-                <span className="font-serif text-3xl text-gold">0{index + 1}</span>
-                <p className="mt-3 text-fg">{outcome}</p>
+              <li key={outcome} data-reveal style={delay(index * 90)} className="shape-bubble flex gap-3.5 bg-base/90 px-5 py-4 text-fg">
+                <CheckBadge />
+                {outcome}
               </li>
             ))}
           </ul>
@@ -203,7 +209,6 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       {/* 10. Ways to engage */}
       <section className="page-container py-20 md:py-28">
         <SectionHeading
-          kicker="Ways to work together"
           title="Start small or go deep"
           intro="Begin with an initial consultation or the Operations Diagnostic. Larger work runs as a focused project or a monthly retainer."
         />
@@ -217,10 +222,9 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
       {/* 12. Guides */}
       {guides.length > 0 ? (
-        <section aria-labelledby="guides-heading" className="bg-deep py-20 md:py-28">
+        <section aria-labelledby="guides-heading" className="py-20 md:py-28">
           <div className="page-container">
             <SectionHeading
-              kicker="Guides"
               title={`Practical guides on ${service.name.toLowerCase()}`}
               intro="Practical articles drawn from the problems we help clients solve."
               id="guides-heading"
@@ -238,18 +242,20 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       ) : null}
 
       {/* 13. Related services */}
-      <section className="page-container py-20 md:py-28">
-        <SectionHeading kicker="Related services" title="Often paired with" />
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
-          {otherServices.map((other, index) => (
-            <div key={other.slug} data-reveal style={delay(index * 100)}>
-              <ImageCard
-                ratio="aspect-[16/10]"
-                sizes="(min-width: 640px) 45vw, 90vw"
-                item={{ image: other.images.card, title: other.heading, body: other.summary, href: `/services/${other.slug}` }}
-              />
-            </div>
-          ))}
+      <section className="bg-deep">
+        <div className="page-container py-20 md:py-28">
+          <SectionHeading title="Often paired with" />
+          <div className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2">
+            {otherServices.map((other, index) => (
+              <div key={other.slug} data-reveal style={delay(index * 100)}>
+                <ImageCard
+                  ratio="aspect-[16/10]"
+                  sizes="(min-width: 640px) 45vw, 90vw"
+                  item={{ image: other.images.card, title: other.heading, body: other.summary, href: `/services/${other.slug}` }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

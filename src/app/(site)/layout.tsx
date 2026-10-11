@@ -86,7 +86,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
     <div id="top" className="site">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-full focus:bg-gold focus:px-5 focus:py-2.5 focus:font-semibold focus:text-night"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-full focus:bg-accent focus:px-5 focus:py-2.5 focus:font-semibold focus:text-on-accent"
       >
         Skip to main content
       </a>

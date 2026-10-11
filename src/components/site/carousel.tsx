@@ -78,7 +78,7 @@ export function Carousel({
             >
               <span
                 className={`block h-2.5 rounded-full transition-all duration-500 ${
-                  index === selected ? "w-8 bg-gold" : "w-2.5 bg-fg/30 group-hover:bg-fg/60"
+                  index === selected ? "w-8 bg-accent" : "w-2.5 bg-fg/30 group-hover:bg-fg/60"
                 }`}
               />
             </button>
@@ -89,7 +89,7 @@ export function Carousel({
             type="button"
             aria-label="Previous slide"
             onClick={() => embla?.scrollPrev()}
-            className="grid size-12 place-items-center rounded-full border border-line-strong text-fg transition-colors hover:border-gold hover:bg-gold hover:text-night"
+            className="grid size-12 place-items-center rounded-full bg-panel text-fg transition-colors hover:bg-accent hover:text-on-accent"
           >
             <svg viewBox="0 0 20 20" aria-hidden="true" className="size-5">
               <path d="M16 10H5M9 5l-5 5 5 5" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -99,7 +99,7 @@ export function Carousel({
             type="button"
             aria-label="Next slide"
             onClick={() => embla?.scrollNext()}
-            className="grid size-12 place-items-center rounded-full border border-line-strong text-fg transition-colors hover:border-gold hover:bg-gold hover:text-night"
+            className="grid size-12 place-items-center rounded-full bg-panel text-fg transition-colors hover:bg-accent hover:text-on-accent"
           >
             <svg viewBox="0 0 20 20" aria-hidden="true" className="size-5">
               <path d="M4 10h11M11 5l5 5-5 5" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round" />

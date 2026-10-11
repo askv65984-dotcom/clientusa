@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { InsightCard } from "@/components/site/insight-card";
 import { JsonLd } from "@/components/site/json-ld";
-import { CtaBand, PageHero, SectionHeading } from "@/components/site/sections";
+import { CtaBand, PageHero, SectionHeading, practiceTone } from "@/components/site/sections";
 import { insights, type InsightCategory } from "@/content/insights";
 import { services } from "@/content/services";
 import { organizationId, pageMetadata, webPageJsonLd } from "@/lib/seo";
@@ -75,7 +75,7 @@ export default function InsightsPage() {
         title="Insights for people who run healthcare"
         lede="Practical, plain-spoken guides on patient access, virtual care and pharmacy operations, drawn from the problems we help clients solve."
       >
-        <a href="#latest" className="btn btn-gold">
+        <a href="#latest" className="btn btn-accent">
           Read the latest
         </a>
         <Link href="/book" className="btn btn-ghost">
@@ -84,14 +84,14 @@ export default function InsightsPage() {
       </PageHero>
 
       <section id="latest" aria-labelledby="featured-heading" className="page-container scroll-mt-24 py-20 md:py-24">
-        <SectionHeading kicker="Featured" title="Start here" id="featured-heading" />
-        <div className="mt-10 grid gap-6 lg:grid-cols-12">
+        <SectionHeading title="Start here" id="featured-heading" />
+        <div className="mt-10 grid gap-x-10 gap-y-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <InsightCard insight={featured} />
           </div>
-          <div className="grid gap-6 lg:col-span-5">
-            {rest.slice(0, 2).map((insight, index) => (
-              <InsightCard key={insight.slug} insight={insight} index={index + 1} />
+          <div className="grid content-start gap-10 lg:col-span-5">
+            {rest.slice(0, 3).map((insight, index) => (
+              <InsightCard key={insight.slug} insight={insight} index={index + 1} layout="row" />
             ))}
           </div>
         </div>
@@ -108,14 +108,20 @@ export default function InsightsPage() {
           >
             <div className="page-container">
               <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <SectionHeading kicker="Practice area" title={category.name} intro={category.intro} id={`cat-${index}`} />
+                <div data-reveal className={`max-w-3xl ${practiceTone(category.name)}`}>
+                  <h2 id={`cat-${index}`} className="flex items-center gap-4 text-section text-fg">
+                    <span aria-hidden="true" className="size-4 shrink-0 rounded-full bg-[var(--tone)]" />
+                    {category.name}
+                  </h2>
+                  <p className="mt-5 max-w-[42rem] text-lede text-fg-muted">{category.intro}</p>
+                </div>
                 {service ? (
                   <Link href={`/services/${service.slug}`} className="btn btn-ghost shrink-0">
                     {service.heading}
                   </Link>
                 ) : null}
               </div>
-              <div className="mt-10 grid gap-6 md:grid-cols-2">
+              <div className="mt-10 grid gap-x-6 gap-y-12 md:grid-cols-2">
                 {items.map((insight, i) => (
                   <InsightCard key={insight.slug} insight={insight} index={i} headingLevel="h3" />
                 ))}

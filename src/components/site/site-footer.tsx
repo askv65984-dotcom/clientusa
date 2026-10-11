@@ -7,7 +7,6 @@ import { telHref } from "@/lib/format";
 import { legalNav, mainNav } from "@/lib/site";
 import { BrandLogo } from "./logo";
 import { NewsletterForm } from "./newsletter-form";
-import { Photo } from "./photo";
 
 async function currentYear() {
   "use cache";
@@ -22,27 +21,22 @@ const companyLinks = [
 ];
 
 function FooterHeading({ children }: { children: string }) {
-  return <h2 className="font-sans text-[0.9375rem] font-semibold tracking-normal text-gold">{children}</h2>;
+  return <h2 className="font-sans text-base font-bold tracking-normal text-fg">{children}</h2>;
 }
 
-const linkClass = "text-fg-muted no-underline transition-colors hover:text-gold";
+const linkClass = "text-fg-muted no-underline transition-colors hover:text-accent";
 
 export async function SiteFooter() {
   const [settings, year] = await Promise.all([getSiteSettings(), currentYear()]);
   const email = settings.contact_email;
 
   return (
-    <footer className="relative isolate overflow-hidden border-t border-line bg-deep">
-      <div className="absolute inset-0 -z-10 opacity-[0.07]">
-        <Photo name="home-pathway" alt="" sizes="100vw" className="object-cover" />
-      </div>
-      <div aria-hidden="true" className="glow -right-40 -top-40 -z-10 size-[30rem] bg-gold/15" />
-
+    <footer className="theme-dark bg-deep">
       {/* Newsletter */}
-      <div className="page-container border-b border-line py-14 md:py-16">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+      <div className="page-container pt-14 md:pt-20">
+        <div className="shape-bubble grid gap-8 bg-panel p-7 sm:p-10 md:p-12 lg:grid-cols-12 lg:items-center">
           <div className="lg:col-span-6">
-            <h2 className="text-[2rem] leading-tight text-fg md:text-[2.5rem]">Notes on running better healthcare operations</h2>
+            <h2 className="text-[1.875rem] leading-tight text-fg md:text-[2.375rem]">Notes on running better healthcare operations</h2>
             <p className="mt-3 max-w-xl text-fg-muted">
               Practical ideas on patient access, virtual care and pharmacy workflow, sent occasionally. No sales sequences.
             </p>
@@ -65,7 +59,7 @@ export async function SiteFooter() {
           <dl className="mt-7 space-y-4 text-[0.975rem]">
             <div className="flex gap-3">
               <dt className="sr-only">Email</dt>
-              <svg viewBox="0 0 20 20" aria-hidden="true" className="mt-1 size-4 shrink-0 text-gold">
+              <svg viewBox="0 0 20 20" aria-hidden="true" className="mt-1 size-4 shrink-0 text-accent">
                 <rect x="2.5" y="4.5" width="15" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.5" fill="none" />
                 <path d="M3 5.5l7 5.5 7-5.5" stroke="currentColor" strokeWidth="1.5" fill="none" />
               </svg>
@@ -78,7 +72,7 @@ export async function SiteFooter() {
             {settings.contact_phone ? (
               <div className="flex gap-3">
                 <dt className="sr-only">Phone</dt>
-                <svg viewBox="0 0 20 20" aria-hidden="true" className="mt-1 size-4 shrink-0 text-gold">
+                <svg viewBox="0 0 20 20" aria-hidden="true" className="mt-1 size-4 shrink-0 text-accent">
                   <path d="M5 2.5h3l1.5 4-2 1.25a9 9 0 004.75 4.75L13.5 10.5l4 1.5v3a2 2 0 01-2 2A13.5 13.5 0 013 4.5a2 2 0 012-2z" stroke="currentColor" strokeWidth="1.4" fill="none" />
                 </svg>
                 <dd>
@@ -91,7 +85,7 @@ export async function SiteFooter() {
             {settings.office_hours ? (
               <div className="flex gap-3">
                 <dt className="sr-only">Office hours</dt>
-                <svg viewBox="0 0 20 20" aria-hidden="true" className="mt-1 size-4 shrink-0 text-gold">
+                <svg viewBox="0 0 20 20" aria-hidden="true" className="mt-1 size-4 shrink-0 text-accent">
                   <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.5" fill="none" />
                   <path d="M10 5.5V10l3 2" stroke="currentColor" strokeWidth="1.5" fill="none" />
                 </svg>
@@ -100,7 +94,7 @@ export async function SiteFooter() {
             ) : null}
             <div className="flex gap-3">
               <dt className="sr-only">Service area</dt>
-              <svg viewBox="0 0 20 20" aria-hidden="true" className="mt-1 size-4 shrink-0 text-gold">
+              <svg viewBox="0 0 20 20" aria-hidden="true" className="mt-1 size-4 shrink-0 text-accent">
                 <path d="M10 18s6-5.5 6-10a6 6 0 10-12 0c0 4.5 6 10 6 10z" stroke="currentColor" strokeWidth="1.5" fill="none" />
                 <circle cx="10" cy="8" r="2" stroke="currentColor" strokeWidth="1.5" fill="none" />
               </svg>
@@ -112,7 +106,7 @@ export async function SiteFooter() {
               href={settings.linkedin_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-7 inline-flex size-11 items-center justify-center rounded-full border border-line-strong text-fg transition-colors hover:border-gold hover:bg-gold hover:text-night"
+              className="mt-7 inline-flex size-11 items-center justify-center rounded-full bg-panel text-fg transition-colors hover:bg-accent hover:text-on-accent"
             >
               <span className="sr-only">Anoka Advisors on LinkedIn</span>
               <svg viewBox="0 0 24 24" aria-hidden="true" className="size-5 fill-current">
@@ -187,9 +181,9 @@ export async function SiteFooter() {
               </li>
             ))}
           </ul>
-          <div className="mt-8 rounded-2xl border border-line bg-night/50 p-4 text-sm text-fg-soft">
+          <div className="mt-8 rounded-2xl bg-panel p-4 text-sm text-fg-soft">
             <p className="flex items-center gap-2 font-semibold text-fg">
-              <svg viewBox="0 0 20 20" aria-hidden="true" className="size-4 text-gold">
+              <svg viewBox="0 0 20 20" aria-hidden="true" className="size-4 text-accent">
                 <rect x="4" y="9" width="12" height="8" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none" />
                 <path d="M7 9V6.5a3 3 0 016 0V9" stroke="currentColor" strokeWidth="1.5" fill="none" />
               </svg>
@@ -207,9 +201,9 @@ export async function SiteFooter() {
             &copy; {year} Anoka Advisors. All rights reserved. We provide operations consulting and do not provide legal,
             medical, billing or tax advice.
           </p>
-          <a href="#top" className="inline-flex items-center gap-2 self-start whitespace-nowrap text-fg-muted no-underline hover:text-gold md:self-auto">
+          <a href="#top" className="inline-flex items-center gap-2 self-start whitespace-nowrap text-fg-muted no-underline hover:text-accent md:self-auto">
             Back to top
-            <span className="grid size-8 place-items-center rounded-full border border-line-strong">
+            <span className="grid size-9 place-items-center rounded-full bg-panel">
               <svg viewBox="0 0 20 20" aria-hidden="true" className="size-4">
                 <path d="M10 16V5M5 9l5-5 5 5" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

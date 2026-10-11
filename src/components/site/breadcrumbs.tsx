@@ -6,18 +6,18 @@ export function Breadcrumbs({ items }: { items: { name: string; path: string }[]
   return (
     <>
       <nav aria-label="Breadcrumb" className="text-[0.9375rem]">
-        <ol className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-fg/15 bg-night/40 px-4 py-1.5 backdrop-blur">
+        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
           {items.map((item, index) => {
             const last = index === items.length - 1;
             return (
               <li key={item.path} className="flex items-center gap-2">
                 {last ? (
-                  <span aria-current="page" className="text-gold">
+                  <span aria-current="page" className="text-fg-soft">
                     {item.name}
                   </span>
                 ) : (
                   <>
-                    <Link href={item.path} className="text-fg-muted no-underline hover:text-fg">
+                    <Link href={item.path} className="font-bold text-accent no-underline hover:text-accent-strong">
                       {item.name}
                     </Link>
                     <span aria-hidden="true" className="text-fg-soft">
